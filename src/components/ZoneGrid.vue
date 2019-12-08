@@ -7,11 +7,11 @@
           :key="index"
           :label="column.title"
         >
-          <template v-if="column.field == block">
-            Block
+          <template v-if="column.field == 'block'">
+            {{ props.row[column.field] }}
           </template>
           <template v-else>
-          {{ props.row[column.field] }}
+          <ZoneBlock :zone-data="props.row[column.field]" :selected-zone="zone"></ZoneBlock>
           </template>
         </b-table-column>
       </template>
@@ -22,12 +22,14 @@
 <script>
 import Vue from "vue";
 import Component from "vue-class-component";
-//import moment from 'moment';
-// import axios from "axios";
+import ZoneBlock from './ZoneBlock';
 
 var moment = require("moment");
 
 @Component({
+  components: {
+    ZoneBlock
+  },
   props: {
     selectedDate: Date,
     zone: Number
