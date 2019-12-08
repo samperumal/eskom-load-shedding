@@ -10,7 +10,7 @@
         ></b-datepicker>
       </b-field>
       <b-field label="Zone">
-        <b-select placeholder="Select a zone" v-model="zone">
+        <b-select placeholder="Select a zone" v-model="selectedZone">
           <option
             v-for="option in 16"
             :value="option"
@@ -19,8 +19,14 @@
           </option>
         </b-select>
       </b-field>
+      <div class="block">
+        <b-checkbox v-model="selectedStages" native-value="stage1">Stage 1</b-checkbox>
+        <b-checkbox v-model="selectedStages" native-value="stage2">Stage 2</b-checkbox>
+        <b-checkbox v-model="selectedStages" native-value="stage3">Stage 3</b-checkbox>
+        <b-checkbox v-model="selectedStages" native-value="stage4">Stage 4</b-checkbox>
+      </div>
     </section>
-    <ZoneGrid :selectedDate="selectedDate" :zone="zone"></ZoneGrid>
+    <ZoneGrid :selectedDate="selectedDate" :selectedZone="selectedZone" :selectedStages="selectedStages"></ZoneGrid>
   </div>
 </template>
 
@@ -39,7 +45,8 @@ import ZoneGrid from "./components/ZoneGrid";
 })
 export default class App extends Vue {
   selectedDate = new Date();
-  zone = 11;
+  selectedZone = 11;
+  selectedStages = ["stage1", "stage2", "stage3", "stage4"];
 
   mount() {
     

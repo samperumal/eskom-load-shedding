@@ -11,7 +11,7 @@
             {{ props.row[column.field] }}
           </template>
           <template v-else>
-          <ZoneBlock :zone-data="props.row[column.field]" :selected-zone="zone"></ZoneBlock>
+          <ZoneBlock :zoneData="props.row[column.field]" :selectedZone="selectedZone" :selectedStages="selectedStages"></ZoneBlock>
           </template>
         </b-table-column>
       </template>
@@ -32,12 +32,14 @@ var moment = require("moment");
   },
   props: {
     selectedDate: Date,
-    zone: Number
+    selectedZone: Number,
+    selectedStages: Array
   }
 })
 export default class ZoneGrid extends Vue {
   days = [];
   selectedDay = -1;
+  //selectedStages = ["stage1", "stage2", "stage3", "stage4"];
 
   get tableColumns() {
     const headers = [{ title: "Block", field: "block" }];
@@ -56,21 +58,21 @@ export default class ZoneGrid extends Vue {
   }
 
   get tableData() {
-    console.log("Recalculating");
     const rows = [];
     if (this.days.length == 0) return [];
 
     for (let blockIndex = 0; blockIndex < 12; blockIndex += 1) {
       const row = {};
+      
       row["block"] = `${blockIndex * 2}:00-${(blockIndex + 1) * 2}:30`;
+      
       let dayStart = this.selectedDate.getDate() - 1;
       for (let day = 0; day < 7; day += 1) {
         const dayData = this.days[dayStart + day];
-        if (dayData != null) row[`day${day}`] = dayData.blocks[blockIndex];
-        // console.log(dayData.blocks, dayStart + day, blockIndex);
-        // else console.log("Missing", dayStart + day, blockIndex);
-        //
+        if (dayData != null) 
+          row[`day${day}`] = dayData.blocks[blockIndex];
       }
+      
       rows.push(row);
     }
     return rows;

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-for="(value, key) in zoneData" class="zone" :class="key">
-            <span v-if="value == selectedZone">{{ value }}</span>
+            <span v-if="value == selectedZone && selectedStages.includes(key)">{{ value }}</span>
         </div>
     </div>
 </template>
@@ -13,7 +13,8 @@ import Component from "vue-class-component";
 @Component({
   props: {
     zoneData: Object,
-    selectedZone: Number
+    selectedZone: Number,
+    selectedStages: Array
   }
 })
 export default class ZoneBlock extends Vue {
