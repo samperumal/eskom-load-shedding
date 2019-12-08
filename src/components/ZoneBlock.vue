@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-for="(value, key) in zoneData" class="zone" :class="key">
+        <div v-for="(value, key) in zoneData" class="zone is-danger" :class="key">
             <span v-if="value == selectedZone && selectedStages.includes(key)">{{ value }}</span>
         </div>
     </div>

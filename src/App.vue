@@ -10,7 +10,7 @@
         ></b-datepicker>
       </b-field>
       <b-field label="Zone">
-        <b-select placeholder="Select a zone" v-model="selectedZone">
+        <b-select placeholder="Select a zone" v-model="selectedZone" type="is-info">
           <option
             v-for="option in 16"
             :value="option"
@@ -20,10 +20,10 @@
         </b-select>
       </b-field>
       <div class="block">
-        <b-checkbox v-model="selectedStages" native-value="stage1">Stage 1</b-checkbox>
-        <b-checkbox v-model="selectedStages" native-value="stage2">Stage 2</b-checkbox>
-        <b-checkbox v-model="selectedStages" native-value="stage3">Stage 3</b-checkbox>
-        <b-checkbox v-model="selectedStages" native-value="stage4">Stage 4</b-checkbox>
+        <b-checkbox v-model="selectedStages" native-value="stage1" type="is-stage1">Stage 1</b-checkbox>
+        <b-checkbox v-model="selectedStages" native-value="stage2" type="is-stage2">Stage 2</b-checkbox>
+        <b-checkbox v-model="selectedStages" native-value="stage3" type="is-stage3">Stage 3</b-checkbox>
+        <b-checkbox v-model="selectedStages" native-value="stage4" type="is-stage4">Stage 4</b-checkbox>
       </div>
     </section>
     <ZoneGrid :selectedDate="selectedDate" :selectedZone="selectedZone" :selectedStages="selectedStages"></ZoneGrid>
@@ -55,6 +55,18 @@ export default class App extends Vue {
 }
 </script>
 
+<style lang="scss">
+// Import Bulma's core
+@import "~bulma/sass/utilities/_all";
+
+@import "./styles/styles.scss";
+
+// Import Bulma and Buefy styles
+@import "~bulma";
+@import "~buefy/src/scss/buefy";
+
+</style>
+
 <style>
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
@@ -69,21 +81,5 @@ export default class App extends Vue {
   text-align: center;
   color: white;
   font-weight: bold;
-}
-
-.stage1 {
-  background-color: #1b9e77;
-}
-
-.stage2 {
-  background-color: #7570b3;
-}
-
-.stage3 {
-  background-color: #d95f02;
-}
-
-.stage4 {
-  background-color: #e7298a;
 }
 </style>
