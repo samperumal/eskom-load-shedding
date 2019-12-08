@@ -57,4 +57,26 @@ export default class App extends Vue {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+.zone {
+  text-align: center;
+  color: white;
+  font-weight: bold;
+}
+
+.stage1 {
+  background-color: #1b9e77;
+}
+
+.stage2 {
+  background-color: #7570b3;
+}
+
+.stage3 {
+  background-color: #d95f02;
+}
+
+.stage4 {
+  background-color: #e7298a;
+}
 </style>
