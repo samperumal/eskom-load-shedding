@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img width="25%" src="./assets/logo.png" />
+    <!-- <img width="25%" src="./assets/logo.png" /> -->
     <section>
       <b-field label="Select a date">
         <b-datepicker          
@@ -9,8 +9,18 @@
           v-model="selectedDate"          
         ></b-datepicker>
       </b-field>
+      <b-field label="Zone">
+        <b-select placeholder="Select a zone" v-model="zone">
+          <option
+            v-for="option in 16"
+            :value="option"
+            :key="option">
+            Zone {{ option }}
+          </option>
+        </b-select>
+      </b-field>
     </section>
-    <ZoneGrid :selectedDate="selectedDate"/>
+    <ZoneGrid :selectedDate="selectedDate" :zone="zone"></ZoneGrid>
   </div>
 </template>
 
@@ -28,8 +38,9 @@ import ZoneGrid from "./components/ZoneGrid";
   }
 })
 export default class App extends Vue {
-  selectedDate = new Date()
-  
+  selectedDate = new Date();
+  zone = 11;
+
   mount() {
     
   }

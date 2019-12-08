@@ -1,6 +1,21 @@
 <template>
   <div class="wrapper">
-    <b-table :columns="tableColumns" :data="tableData"></b-table>
+    <b-table :data="tableData">
+      <template slot-scope="props">
+        <b-table-column
+          v-for="(column, index) in tableColumns"
+          :key="index"
+          :label="column.title"
+        >
+          <template v-if="column.field == block">
+            Block
+          </template>
+          <template v-else>
+          {{ props.row[column.field] }}
+          </template>
+        </b-table-column>
+      </template>
+    </b-table>
   </div>
 </template>
 
@@ -10,30 +25,31 @@ import Component from "vue-class-component";
 //import moment from 'moment';
 // import axios from "axios";
 
-var moment = require('moment');
+var moment = require("moment");
 
 @Component({
   props: {
-    selectedDate: Date
+    selectedDate: Date,
+    zone: Number
   }
-}) 
+})
 export default class ZoneGrid extends Vue {
-  days = []
-  selectedDay = -1
+  days = [];
+  selectedDay = -1;
 
   get tableColumns() {
-    const headers = [{ label: "Block", field: "block" }];
+    const headers = [{ title: "Block", field: "block" }];
     const localDate = moment(this.selectedDate);
     for (let i = 0; i < 7; i++) {
-      const d = moment(this.selectedDate)
-      d.add(i, 'days');
-      
+      const d = moment(this.selectedDate);
+      d.add(i, "days");
+
       headers.push({
-        label: d.format("ddd Do MMM"),
-        field: `day${ i }`
+        title: d.format("ddd Do MMM"),
+        field: `day${i}`
       });
     }
-    
+
     return headers;
   }
 
@@ -48,35 +64,33 @@ export default class ZoneGrid extends Vue {
       let dayStart = this.selectedDate.getDate() - 1;
       for (let day = 0; day < 7; day += 1) {
         const dayData = this.days[dayStart + day];
-        if (dayData != null)
-          row[`day${day}`] = dayData.blocks[blockIndex];
+        if (dayData != null) row[`day${day}`] = dayData.blocks[blockIndex];
         // console.log(dayData.blocks, dayStart + day, blockIndex);
         // else console.log("Missing", dayStart + day, blockIndex);
         //
-      }      
+      }
       rows.push(row);
     }
     return rows;
   }
 
   modBase1(dividend, divisor) {
-    const ret = dividend % divisor
-    if (ret == 0)
-      return divisor
-    else return ret
+    const ret = dividend % divisor;
+    if (ret == 0) return divisor;
+    else return ret;
   }
 
   mounted() {
-    this.selectedDay = new Date().getDate()
-    
+    this.selectedDay = new Date().getDate();
+
     for (let i = 1; i <= 31; i++) {
-      let day = i
-      if (day >= 17) day = i - 16
-      const data = {}
-      data["day"] = i
-      
+      let day = i;
+      if (day >= 17) day = i - 16;
+      const data = {};
+      data["day"] = i;
+
       data["offset"] = Math.ceil(day / 4);
-      let stageBase = this.modBase1((data["offset"] + 12 * (day - 1)), 16);
+      let stageBase = this.modBase1(data["offset"] + 12 * (day - 1), 16);
       const blocks = [];
       for (let blockIndex = 0; blockIndex < 12; blockIndex += 1) {
         const block = {
@@ -88,9 +102,9 @@ export default class ZoneGrid extends Vue {
 
         blocks.push(block);
       }
-      
+
       data["blocks"] = blocks;
-      this.days.push(data)
+      this.days.push(data);
     }
   }
 }
