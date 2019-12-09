@@ -3,6 +3,9 @@
     <!-- <img width="25%" src="./assets/logo.png" /> -->
     <div class="columns">
       <div class="column is-one-fifth">
+        <div class="box is-size-5 has-text-weight-semibold">
+          Cape Town Load Shedding Schedule
+        </div>
         <b-field label="Date" expanded>
           <b-datepicker
             placeholder="Click to select..."
@@ -28,18 +31,14 @@
         </b-field>
         <b-field label="Summary" expanded>
           <div class="block">
-          <div 
-            v-for="(day, dindex) in activeBlocks"
-            :key="dindex"
-            class="block"
-          >
-            <div class="day-summary">{{ day.day }}</div>
-            <div
-              v-for="(block, bindex) in day.blocks"
-              :key="bindex"
-              :class="block.stage"
-            >{{ block.block }}</div>
-          </div>
+            <div v-for="(day, dindex) in activeBlocks" :key="dindex" class="block">
+              <div class="day-summary">{{ day.day }}</div>
+              <div
+                v-for="(block, bindex) in day.blocks"
+                :key="bindex"
+                :class="block.stage"
+              >{{ block.block }}</div>
+            </div>
           </div>
         </b-field>
       </div>
@@ -99,7 +98,11 @@ export default Vue.extend({
     validDays: function() {
       const daysResult = [];
       for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
-        daysResult.push(moment(this.selectedDate).add(dayOffset, 'days').date());
+        daysResult.push(
+          moment(this.selectedDate)
+            .add(dayOffset, "days")
+            .date()
+        );
       }
       return daysResult;
     },
@@ -111,7 +114,7 @@ export default Vue.extend({
         if (!validDays.includes(day.day)) continue;
 
         const blocksResult = [];
-      
+
         for (const blockIndex in day.blocks) {
           const block = day.blocks[blockIndex];
           for (const stage in block) {
@@ -119,18 +122,20 @@ export default Vue.extend({
             if (zone != this.selectedZone) continue;
             if (stage > this.selectedStage) continue;
             blocksResult.push({
-              block: `${blockIndex * 2}:00 - ${blockIndex * 2 + 2}:30`,
+              block: `${String(blockIndex * 2).padStart(2, '0')}:00 - ${String(blockIndex * 2 + 2).padStart(2, '0')}:30`,
               stage: `stage${stage}`
             });
           }
         }
 
         if (blocksResult.length == 0)
-          blocksResult = [{block: "No load shedding", stage: ""}];
+          blocksResult = [{ block: "No load shedding", stage: "" }];
 
         daysResult.push({
-          day: moment(this.selectedDate).add(day.day, 'days').format("ddd Do MMM"),
-          blocks: blocksResult 
+          day: moment(this.selectedDate)
+            .date(day.day)
+            .format("ddd Do MMM"),
+          blocks: blocksResult
         });
       }
 
@@ -159,8 +164,8 @@ export default Vue.extend({
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 20px;
   padding-left: 1em;
   padding-right: 1em;
+  margin-top: 20px;
 }
 </style>

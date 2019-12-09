@@ -68,7 +68,7 @@ export default Vue.extend({
       for (let blockIndex = 0; blockIndex < 12; blockIndex += 1) {
         const row = {};
         
-        row["block"] = `${blockIndex * 2}:00-${(blockIndex + 1) * 2}:30`;
+        row["block"] = `${String(blockIndex * 2).padStart(2, '0')}:00 - ${String(blockIndex * 2 + 2).padStart(2, '0')}:30`;
         
         let dayStart = this.selectedDate.getDate() - 1;
         for (let day = 0; day < 7; day += 1) {
