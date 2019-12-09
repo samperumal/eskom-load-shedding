@@ -1,0 +1,25 @@
+{
+  "name": "static-websites",
+  "version": "0.1.0",
+  "description": "Collection of statically served websites for testing purposes",
+  "keywords": [],
+  "author": "Sam Perumal",
+  "private": true,
+  "scripts": {
+    "clean": "rm dist/bundle.js",
+    "build-dev": "parcel src/index.html",
+    "build-prod": "parcel build src/index.html"
+  },
+  "dependencies": {
+    "buefy": "^0.8.8",
+    "moment": "^2.24.0",
+    "vue": "^2.5.18",
+    "vue-hot-reload-api": "^2.3.4"
+  },
+  "devDependencies": {
+    "@vue/component-compiler-utils": "^3.1.0",
+    "parcel-bundler": "^1.12.4",
+    "typescript": "^3.7.3",
+    "vue-template-compiler": "^2.6.10"
+  }
+}
