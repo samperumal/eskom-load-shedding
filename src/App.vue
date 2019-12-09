@@ -3,7 +3,7 @@
     <!-- <img width="25%" src="./assets/logo.png" /> -->
     <section>
       <b-field>
-        <b-field label="Select a date">
+        <b-field label="Date">
           <b-datepicker
             placeholder="Click to select..."
             icon="calendar-today"
@@ -15,7 +15,8 @@
             <option v-for="option in 16" :value="option" :key="option">Zone {{ option }}</option>
           </b-select>
         </b-field>
-        <b-field>
+        <b-field label="Stage">
+          <b-field>
           <b-radio-button
             v-model="selectedStage"
             v-for="stage in possibleStages"
@@ -23,9 +24,10 @@
             :native-value="stage.value"
             :type="stage.type"
           >
-            <b-icon icon="close"></b-icon>
-            <span>{{ stage.label }}</span>
+            <i class="material-icons md24 mdi-icon">{{ stage.icon }}</i>
+            <span style="padding-left: 0.5em;">{{ stage.label }}</span>
           </b-radio-button>
+          </b-field>
         </b-field>
       </b-field>
     </section>
@@ -55,13 +57,15 @@ export default Vue.extend({
   props: {},
   computed: {
     possibleStages: function() {
-      const stages = [{ key: "stage0", label: "None", value: 0 }];
-      for (let i = 1; i <= 4; i++)
+      const stages = [];
+      const icons = ["mood", "sentiment_satisfied", "sentiment_dissatisfied", "sentiment_very_dissatisfied", "mood_bad"];
+      for (let i = 0; i <= 4; i++)
         stages.push({
           key: `stage${i}`,
-          label: `Stage ${i}`,
+          label: i == 0 ? "None" : `Stage ${i}`,
           value: i,
-          type: `is-stage${i}`
+          type: i == 0 ? "is-success" : `is-stage${i}`,
+          icon: icons[i]
         });
       return stages;
     }
