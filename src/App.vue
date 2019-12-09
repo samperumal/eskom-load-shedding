@@ -1,41 +1,43 @@
 <template>
   <div id="app">
     <!-- <img width="25%" src="./assets/logo.png" /> -->
-    <section>
-      <b-field>
-        <b-field label="Date">
-          <b-datepicker
-            placeholder="Click to select..."
-            icon="calendar-today"
-            v-model="selectedDate"
-          ></b-datepicker>
-        </b-field>
-        <b-field label="Zone">
-          <b-select placeholder="Select a zone" v-model="selectedZone" type="is-info">
-            <option v-for="option in 16" :value="option" :key="option">Zone {{ option }}</option>
-          </b-select>
-        </b-field>
-        <b-field label="Stage">
-          <b-field>
-          <b-radio-button
-            v-model="selectedStage"
-            v-for="stage in possibleStages"
-            :key="stage.key"
-            :native-value="stage.value"
-            :type="stage.type"
-          >
-            <i class="material-icons md24 mdi-icon">{{ stage.icon }}</i>
-            <span style="padding-left: 0.5em;">{{ stage.label }}</span>
-          </b-radio-button>
+    <div class="columns">
+      <div class="column is-one-fifth">
+        <b-field grouped group-multiline>
+          <b-field label="Date" expanded>
+            <b-datepicker
+              placeholder="Click to select..."
+              icon="calendar-today"
+              v-model="selectedDate"
+            ></b-datepicker>
+          </b-field>
+          <b-field label="Zone" expanded>
+            <b-select placeholder="Select a zone" v-model="selectedZone" type="is-info" expanded>
+              <option v-for="option in 16" :value="option" :key="option">Zone {{ option }}</option>
+            </b-select>
+          </b-field>
+          <b-field label="Stage" expanded>
+            <b-select v-model="selectedStage" type="is-info" expanded>
+              <option
+                v-for="stage in possibleStages"
+                :value="stage.value"
+                :key="stage.key"
+                :type="stage.type"
+              >
+                {{ stage.label }}
+              </option>
+            </b-select>
           </b-field>
         </b-field>
-      </b-field>
-    </section>
-    <ZoneGrid
-      :selectedDate="selectedDate"
-      :selectedZone="selectedZone"
-      :selectedStage="selectedStage"
-    ></ZoneGrid>
+      </div>
+      <div class="column">
+        <ZoneGrid
+          :selectedDate="selectedDate"
+          :selectedZone="selectedZone"
+          :selectedStage="selectedStage"
+        ></ZoneGrid>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -58,7 +60,13 @@ export default Vue.extend({
   computed: {
     possibleStages: function() {
       const stages = [];
-      const icons = ["mood", "sentiment_satisfied", "sentiment_dissatisfied", "sentiment_very_dissatisfied", "mood_bad"];
+      const icons = [
+        "mood",
+        "sentiment_satisfied",
+        "sentiment_dissatisfied",
+        "sentiment_very_dissatisfied",
+        "mood_bad"
+      ];
       for (let i = 0; i <= 4; i++)
         stages.push({
           key: `stage${i}`,
@@ -93,5 +101,7 @@ export default Vue.extend({
   text-align: center;
   color: #2c3e50;
   margin-top: 20px;
+  padding-left: 1em;
+  padding-right: 1em;
 }
 </style>
