@@ -22,11 +22,16 @@
                 v-for="stage in possibleStages"
                 :value="stage.value"
                 :key="stage.key"
-                :type="stage.type"
               >{{ stage.label }}</option>
             </b-select>
           </b-field>
         </b-field>
+        <b-label>Summary</b-label>
+        <div class="block">
+          <div v-for="(block, index) in activeBlocks" :key="index" :class="block.stage">
+            {{ block.block }}
+          </div>
+        </div>
       </div>
       <div class="column">
         <ZoneGrid
@@ -35,15 +40,6 @@
           :selectedZone="selectedZone"
           :selectedStage="selectedStage"
         ></ZoneGrid>
-        <!-- <section v-for="(row, rindex) in matrixRows" :key="rindex">
-          <div class="columns">
-            <div v-for="(col, cindex) in row" :key="cindex" class="column">
-              <div>{{ col.day }}</div>
-              <div v-for="(block, bindex) in col.blocks" :key="bindex">
-                <span v-for="zone in block">{{ zone }}, </span>
-            </div>
-          </div>
-        </section>-->
       </div>
     </div>
   </div>
@@ -63,7 +59,7 @@ export default Vue.extend({
     return {
       selectedDate: new Date(),
       selectedZone: 11,
-      selectedStage: 1,
+      selectedStage: 6,
       matrixData: createMatrix()
     };
   },
@@ -78,8 +74,7 @@ export default Vue.extend({
         stages.push({
           key: `stage${i}`,
           label: i == 0 ? "None" : `Stage ${i}`,
-          value: i,
-          type: i == 0 ? "is-success" : `is-stage${i}`
+          value: i
         });
       return stages;
     },
@@ -88,6 +83,29 @@ export default Vue.extend({
       for (let index = 0; index < this.matrixData.length; index += 11)
         rows.push(this.matrixData.slice(index, index + 11));
       return rows;
+    },
+    activeBlocks: function() {
+      const blocksResult = [];
+      const selectedDay = this.selectedDate.getDate();
+
+      for (const day of this.matrixData) {
+        if (day.day != selectedDay) continue;
+        for (const blockIndex in day.blocks) {
+          const block = day.blocks[blockIndex];
+          for (const stage in block) {
+            const zone = block[stage];
+            if (zone != this.selectedZone) continue;
+            if (stage > this.selectedStage) continue;
+            blocksResult.push({
+              day: day.day,
+              block: `${blockIndex * 2}:00 - ${blockIndex * 2 + 2}:30`,
+              stage: `stage${stage}`
+            });
+          }
+        }
+      }
+
+      return blocksResult;
     }
   },
   mounted: function() {}
