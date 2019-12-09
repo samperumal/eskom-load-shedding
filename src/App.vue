@@ -2,7 +2,7 @@
   <div id="app">
     <!-- <img width="25%" src="./assets/logo.png" /> -->
     <div class="columns">
-      <!-- <div class="column is-one-fifth">
+      <div class="column is-one-fifth">
         <b-field grouped group-multiline>
           <b-field label="Date" expanded>
             <b-datepicker
@@ -27,14 +27,15 @@
             </b-select>
           </b-field>
         </b-field>
-      </div> -->
+      </div>
       <div class="column">
-        <!-- <ZoneGrid
+        <ZoneGrid
+          :matrixData="matrixData"
           :selectedDate="selectedDate"
           :selectedZone="selectedZone"
           :selectedStage="selectedStage"
-        ></ZoneGrid>-->
-        <section v-for="(row, rindex) in matrixRows" :key="rindex">
+        ></ZoneGrid>
+        <!-- <section v-for="(row, rindex) in matrixRows" :key="rindex">
           <div class="columns">
             <div v-for="(col, cindex) in row" :key="cindex" class="column">
               <div>{{ col.day }}</div>
@@ -42,7 +43,7 @@
                 <span v-for="zone in block">{{ zone }}, </span>
             </div>
           </div>
-        </section>
+        </section>-->
       </div>
     </div>
   </div>
@@ -73,20 +74,12 @@ export default Vue.extend({
   computed: {
     possibleStages: function() {
       const stages = [];
-      const icons = [
-        "mood",
-        "sentiment_satisfied",
-        "sentiment_dissatisfied",
-        "sentiment_very_dissatisfied",
-        "mood_bad"
-      ];
-      for (let i = 0; i <= 4; i++)
+      for (let i = 0; i <= 8; i++)
         stages.push({
           key: `stage${i}`,
           label: i == 0 ? "None" : `Stage ${i}`,
           value: i,
-          type: i == 0 ? "is-success" : `is-stage${i}`,
-          icon: icons[i]
+          type: i == 0 ? "is-success" : `is-stage${i}`
         });
       return stages;
     },

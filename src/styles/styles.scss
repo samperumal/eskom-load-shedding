@@ -6,10 +6,15 @@ $primary: #8c67ef;
 $primary-invert: findColorInvert($primary);
 $twitter: #4099FF;
 $twitter-invert: findColorInvert($twitter);
-$stage1: #1b9e77;
-$stage2: #7570b3;
-$stage3: #d95f02;
-$stage4: #e7298a;
+
+$stage1: #fff7f3;
+$stage2: #fde0dd;
+$stage3: #fcc5c0;
+$stage4: #fa9fb5;
+$stage5: #f768a1;
+$stage6: #dd3497;
+$stage7: #ae017e;
+$stage8: #7a0177;
 
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: (
@@ -52,6 +57,26 @@ div.stage3 {
 div.stage4 {
     background-color: $stage4;
     color: findColorInvert($stage4);
+}
+
+div.stage5 {
+    background-color: $stage5;
+    color: findColorInvert($stage6);
+}
+
+div.stage6 {
+    background-color: $stage6;
+    color: findColorInvert($stage6);
+}
+
+div.stage7 {
+    background-color: $stage7;
+    color: findColorInvert($stage7);
+}
+
+div.stage8 {
+    background-color: $stage8;
+    color: findColorInvert($stage8);
 }
 
 // Links
