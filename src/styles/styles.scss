@@ -29,20 +29,29 @@ $colors: (
     "twitter": ($twitter, $twitter-invert)
 );
 
-div.stage1{
+.zone {
+  text-align: center;
+  font-weight: bold;
+}
+
+div.stage1 {
     background-color: $stage1;
+    color: findColorInvert($stage1);
 }
 
-div.stage2{
+div.stage2 {
     background-color: $stage2;
+    color: findColorInvert($stage2);
 }
 
-div.stage3{
+div.stage3 {
     background-color: $stage3;
+    color: findColorInvert($stage3);
 }
 
-div.stage4{
+div.stage4 {
     background-color: $stage4;
+    color: findColorInvert($stage4);
 }
 
 // Links

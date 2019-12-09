@@ -2,25 +2,44 @@
   <div id="app">
     <!-- <img width="25%" src="./assets/logo.png" /> -->
     <section>
-      <b-field label="Select a date">
-        <b-datepicker placeholder="Click to select..." icon="calendar-today" v-model="selectedDate"></b-datepicker>
+      <b-field>
+        <b-field label="Select a date">
+          <b-datepicker
+            placeholder="Click to select..."
+            icon="calendar-today"
+            v-model="selectedDate"
+          ></b-datepicker>
+        </b-field>
+        <b-field label="Zone">
+          <b-select placeholder="Select a zone" v-model="selectedZone" type="is-info">
+            <option v-for="option in 16" :value="option" :key="option">Zone {{ option }}</option>
+          </b-select>
+        </b-field>
+        <b-field>
+          <b-checkbox v-model="selectedStages" native-value="stage1" type="is-stage1">Stage 1</b-checkbox>
+          <b-checkbox v-model="selectedStages" native-value="stage2" type="is-stage2">Stage 2</b-checkbox>
+          <b-checkbox v-model="selectedStages" native-value="stage3" type="is-stage3">Stage 3</b-checkbox>
+          <b-checkbox v-model="selectedStages" native-value="stage4" type="is-stage4">Stage 4</b-checkbox>
+        </b-field>
+        <b-field>
+          <b-radio-button
+            v-model="selectedStage"
+            v-for="stage in possibleStages"
+            :key="stage.key"
+            :native-value="stage.value"
+            :type="stage.type"
+          >
+            <b-icon icon="close"></b-icon>
+            <span>{{ stage.label }}</span>
+          </b-radio-button>
+        </b-field>
       </b-field>
-      <b-field label="Zone">
-        <b-select placeholder="Select a zone" v-model="selectedZone" type="is-info">
-          <option v-for="option in 16" :value="option" :key="option">Zone {{ option }}</option>
-        </b-select>
-      </b-field>
-      <div class="block">
-        <b-checkbox v-model="selectedStages" native-value="stage1" type="is-stage1">Stage 1</b-checkbox>
-        <b-checkbox v-model="selectedStages" native-value="stage2" type="is-stage2">Stage 2</b-checkbox>
-        <b-checkbox v-model="selectedStages" native-value="stage3" type="is-stage3">Stage 3</b-checkbox>
-        <b-checkbox v-model="selectedStages" native-value="stage4" type="is-stage4">Stage 4</b-checkbox>
-      </div>
     </section>
     <ZoneGrid
       :selectedDate="selectedDate"
       :selectedZone="selectedZone"
       :selectedStages="selectedStages"
+      :selectedStage="selectedStage"
     ></ZoneGrid>
   </div>
 </template>
@@ -34,6 +53,7 @@ export default Vue.extend({
     return {
       selectedDate: new Date(),
       selectedZone: 11,
+      selectedStage: 0,
       selectedStages: ["stage1", "stage2", "stage3", "stage4"]
     };
   },
@@ -41,7 +61,20 @@ export default Vue.extend({
     ZoneGrid
   },
   props: {},
-  mount() {}
+  computed: {
+    possibleStages: function() {
+      const stages = [{ key: "stage0", label: "None", value: 0 }];
+      for (let i = 1; i <= 4; i++)
+        stages.push({
+          key: `stage${i}`,
+          label: `Stage ${i}`,
+          value: i,
+          type: `is-stage${i}`
+        });
+      return stages;
+    }
+  },
+  mount: function() {}
 });
 </script>
 
@@ -63,12 +96,6 @@ export default Vue.extend({
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
-}
-
-.zone {
-  text-align: center;
-  color: white;
-  font-weight: bold;
+  margin-top: 20px;
 }
 </style>

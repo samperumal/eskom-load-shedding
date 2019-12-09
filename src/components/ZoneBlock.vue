@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div v-for="(value, key) in zoneData" :key="key" class="zone is-danger" :class="key">
-      <span v-if="value == selectedZone && selectedStages.includes(key)">{{ value }}</span>
+    <div v-for="(value, key) in zoneData" :key="key" class="zone" :class="`stage${key}`">
+      <span v-if="value == selectedZone && key <= selectedStage">Stage {{ key }}</span>
     </div>
   </div>
 </template>
@@ -13,7 +13,8 @@ export default Vue.extend({
   props: {
     zoneData: Object,
     selectedZone: Number,
-    selectedStages: Array
+    selectedStages: Array,
+    selectedStage: Number
   } 
 });
 </script>

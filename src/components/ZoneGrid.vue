@@ -9,6 +9,7 @@
               :zoneData="props.row[column.field]"
               :selectedZone="selectedZone"
               :selectedStages="selectedStages"
+              :selectedStage="selectedStage"
             ></ZoneBlock>
           </template>
         </b-table-column>
@@ -42,7 +43,8 @@ export default Vue.extend({
   props: {
     selectedDate: Date,
     selectedZone: Number,
-    selectedStages: Array
+    selectedStages: Array,
+    selectedStage: Number
   },
   computed: {
     tableColumns: function() {
@@ -96,10 +98,10 @@ export default Vue.extend({
       const blocks = [];
       for (let blockIndex = 0; blockIndex < 12; blockIndex += 1) {
         const block = {
-          stage1: modBase1(stageBase + blockIndex, 16),
-          stage2: modBase1(stageBase + blockIndex + 8, 16),
-          stage3: modBase1(stageBase + blockIndex + 12, 16),
-          stage4: modBase1(stageBase + blockIndex + 4, 16)
+          "1": modBase1(stageBase + blockIndex, 16),
+          "2": modBase1(stageBase + blockIndex + 8, 16),
+          "3": modBase1(stageBase + blockIndex + 12, 16),
+          "4": modBase1(stageBase + blockIndex + 4, 16)
         };
 
         blocks.push(block);
