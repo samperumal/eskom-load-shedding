@@ -8,7 +8,6 @@
             <ZoneBlock
               :zoneData="props.row[column.field]"
               :selectedZone="selectedZone"
-              :selectedStages="selectedStages"
               :selectedStage="selectedStage"
             ></ZoneBlock>
           </template>
@@ -43,7 +42,6 @@ export default Vue.extend({
   props: {
     selectedDate: Date,
     selectedZone: Number,
-    selectedStages: Array,
     selectedStage: Number
   },
   computed: {

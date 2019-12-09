@@ -16,12 +16,6 @@
           </b-select>
         </b-field>
         <b-field>
-          <b-checkbox v-model="selectedStages" native-value="stage1" type="is-stage1">Stage 1</b-checkbox>
-          <b-checkbox v-model="selectedStages" native-value="stage2" type="is-stage2">Stage 2</b-checkbox>
-          <b-checkbox v-model="selectedStages" native-value="stage3" type="is-stage3">Stage 3</b-checkbox>
-          <b-checkbox v-model="selectedStages" native-value="stage4" type="is-stage4">Stage 4</b-checkbox>
-        </b-field>
-        <b-field>
           <b-radio-button
             v-model="selectedStage"
             v-for="stage in possibleStages"
@@ -38,7 +32,6 @@
     <ZoneGrid
       :selectedDate="selectedDate"
       :selectedZone="selectedZone"
-      :selectedStages="selectedStages"
       :selectedStage="selectedStage"
     ></ZoneGrid>
   </div>
@@ -53,8 +46,7 @@ export default Vue.extend({
     return {
       selectedDate: new Date(),
       selectedZone: 11,
-      selectedStage: 0,
-      selectedStages: ["stage1", "stage2", "stage3", "stage4"]
+      selectedStage: 1
     };
   },
   components: {
