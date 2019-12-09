@@ -3,14 +3,14 @@
     <!-- <img width="25%" src="./assets/logo.png" /> -->
     <div class="columns">
       <div class="column is-one-fifth">
-        <b-field grouped group-multiline>
-          <b-field label="Date" expanded>
-            <b-datepicker
-              placeholder="Click to select..."
-              icon="calendar-today"
-              v-model="selectedDate"
-            ></b-datepicker>
-          </b-field>
+        <b-field label="Date" expanded>
+          <b-datepicker
+            placeholder="Click to select..."
+            icon="calendar-today"
+            v-model="selectedDate"
+          ></b-datepicker>
+        </b-field>
+        <b-field grouped group-multiline expanded>
           <b-field label="Zone" expanded>
             <b-select placeholder="Select a zone" v-model="selectedZone" type="is-info" expanded>
               <option v-for="option in 16" :value="option" :key="option">Zone {{ option }}</option>
@@ -26,12 +26,22 @@
             </b-select>
           </b-field>
         </b-field>
-        <b-label>Summary</b-label>
-        <div class="block">
-          <div v-for="(block, index) in activeBlocks" :key="index" :class="block.stage">
-            {{ block.block }}
+        <b-field label="Summary" expanded>
+          <div class="block">
+          <div 
+            v-for="(day, dindex) in activeBlocks"
+            :key="dindex"
+            class="block"
+          >
+            <div class="day-summary">{{ day.day }}</div>
+            <div
+              v-for="(block, bindex) in day.blocks"
+              :key="bindex"
+              :class="block.stage"
+            >{{ block.block }}</div>
           </div>
-        </div>
+          </div>
+        </b-field>
       </div>
       <div class="column">
         <ZoneGrid
@@ -48,7 +58,9 @@
 <script>
 import Vue from "vue";
 import ZoneGrid from "./components/ZoneGrid";
-import { createMatrix } from "./js/eskom-data";
+import { createMatrix, modBase1 } from "./js/eskom-data";
+
+var moment = require("moment");
 
 // console.log("Starting");
 // const data = createMatrix();
@@ -59,7 +71,7 @@ export default Vue.extend({
     return {
       selectedDate: new Date(),
       selectedZone: 11,
-      selectedStage: 6,
+      selectedStage: 1,
       matrixData: createMatrix()
     };
   },
@@ -84,12 +96,22 @@ export default Vue.extend({
         rows.push(this.matrixData.slice(index, index + 11));
       return rows;
     },
+    validDays: function() {
+      const daysResult = [];
+      for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
+        daysResult.push(moment(this.selectedDate).add(dayOffset, 'days').date());
+      }
+      return daysResult;
+    },
     activeBlocks: function() {
-      const blocksResult = [];
-      const selectedDay = this.selectedDate.getDate();
+      const validDays = this.validDays;
+      const daysResult = [];
 
       for (const day of this.matrixData) {
-        if (day.day != selectedDay) continue;
+        if (!validDays.includes(day.day)) continue;
+
+        const blocksResult = [];
+      
         for (const blockIndex in day.blocks) {
           const block = day.blocks[blockIndex];
           for (const stage in block) {
@@ -97,15 +119,22 @@ export default Vue.extend({
             if (zone != this.selectedZone) continue;
             if (stage > this.selectedStage) continue;
             blocksResult.push({
-              day: day.day,
               block: `${blockIndex * 2}:00 - ${blockIndex * 2 + 2}:30`,
               stage: `stage${stage}`
             });
           }
         }
+
+        if (blocksResult.length == 0)
+          blocksResult = [{block: "No load shedding", stage: ""}];
+
+        daysResult.push({
+          day: moment(this.selectedDate).add(day.day, 'days').format("ddd Do MMM"),
+          blocks: blocksResult 
+        });
       }
 
-      return blocksResult;
+      return daysResult;
     }
   },
   mounted: function() {}

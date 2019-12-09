@@ -79,6 +79,12 @@ div.stage8 {
     color: findColorInvert($stage8);
 }
 
+$daySummary: darkslategray;
+div.day-summary {
+    background-color: $daySummary;
+    color: findColorInvert($daySummary);
+}
+
 // Links
 $link: $primary;
 $link-invert: $primary-invert;

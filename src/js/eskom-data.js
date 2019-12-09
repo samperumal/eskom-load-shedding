@@ -1,4 +1,4 @@
-function modBase1(dividend, divisor) {
+export function modBase1(dividend, divisor) {
     const ret = dividend % divisor;
     if (ret == 0) return divisor;
     else return ret;
