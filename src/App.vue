@@ -31,21 +31,17 @@ import ZoneGrid from "./components/ZoneGrid";
 
 export default Vue.extend({
   data: function() {
-      return {
-        selectedDate: new Date(),
-        selectedZone: 11,
-        selectedStages: ["stage1", "stage2", "stage3", "stage4"],
-      }
+    return {
+      selectedDate: new Date(),
+      selectedZone: 11,
+      selectedStages: ["stage1", "stage2", "stage3", "stage4"]
+    };
   },
   components: {
     ZoneGrid
   },
-  props: {
-    
-  },
-  mount() {
-    
-  }
+  props: {},
+  mount() {}
 });
 </script>
 
@@ -58,7 +54,6 @@ export default Vue.extend({
 // Import Bulma and Buefy styles
 @import "~bulma";
 @import "~buefy/src/scss/buefy";
-
 </style>
 
 <style>
