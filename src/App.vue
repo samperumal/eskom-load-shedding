@@ -2,7 +2,7 @@
   <div id="app">
     <!-- <img width="25%" src="./assets/logo.png" /> -->
     <div class="columns">
-      <div class="column is-one-fifth">
+      <!-- <div class="column is-one-fifth">
         <b-field grouped group-multiline>
           <b-field label="Date" expanded>
             <b-datepicker
@@ -23,19 +23,26 @@
                 :value="stage.value"
                 :key="stage.key"
                 :type="stage.type"
-              >
-                {{ stage.label }}
-              </option>
+              >{{ stage.label }}</option>
             </b-select>
           </b-field>
         </b-field>
-      </div>
+      </div> -->
       <div class="column">
-        <ZoneGrid
+        <!-- <ZoneGrid
           :selectedDate="selectedDate"
           :selectedZone="selectedZone"
           :selectedStage="selectedStage"
-        ></ZoneGrid>
+        ></ZoneGrid>-->
+        <section v-for="(row, rindex) in matrixRows" :key="rindex">
+          <div class="columns">
+            <div v-for="(col, cindex) in row" :key="cindex" class="column">
+              <div>{{ col.day }}</div>
+              <div v-for="(block, bindex) in col.blocks" :key="bindex">
+                <span v-for="zone in block">{{ zone }}, </span>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   </div>
@@ -44,13 +51,19 @@
 <script>
 import Vue from "vue";
 import ZoneGrid from "./components/ZoneGrid";
+import { createMatrix } from "./js/eskom-data";
+
+// console.log("Starting");
+// const data = createMatrix();
+// console.log(data);
 
 export default Vue.extend({
   data: function() {
     return {
       selectedDate: new Date(),
       selectedZone: 11,
-      selectedStage: 1
+      selectedStage: 1,
+      matrixData: createMatrix()
     };
   },
   components: {
@@ -76,9 +89,15 @@ export default Vue.extend({
           icon: icons[i]
         });
       return stages;
+    },
+    matrixRows: function() {
+      const rows = [];
+      for (let index = 0; index < this.matrixData.length; index += 11)
+        rows.push(this.matrixData.slice(index, index + 11));
+      return rows;
     }
   },
-  mount: function() {}
+  mounted: function() {}
 });
 </script>
 
