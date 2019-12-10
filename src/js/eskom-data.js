@@ -7,9 +7,9 @@ export function modBase1(dividend, divisor) {
 function createStage(stage, zone) {
     return {
         stage: stage,
-        zones: [zone]
+        zones: [String(zone)]
     };
-        }
+}
 
 export function createMatrix() {
     const days = [];
@@ -49,7 +49,7 @@ export function createMatrix() {
     }
 
     return {
-        "zones": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+        "zones": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"],
         matrix: days
     };
 }
