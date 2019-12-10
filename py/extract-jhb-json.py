@@ -12,9 +12,12 @@ def readLines():
         return lines
 
 def createBlockStages(block):
-    block = { "block": block, "start": block * 2, "end": (block + 1) * 2 }
-    # for stage in range(1, 9):
-    #     block[str(stage)] = -1
+    block = { 
+        "block": block, 
+        "start": '{:0>2}:00'.format(block * 2), 
+        "end": '{:0>2}:30'.format((block + 1) * 2), 
+        "stages": [{"stage": stage, "zones":[]} for stage in range(1, 9)] 
+    }
 
     return block
 
@@ -24,17 +27,17 @@ data = [{"day": day + 1, "blocks": [createBlockStages(block) for block in range(
 zoneSet = set()
 
 block = 0
-stage = 1
+stage = 0
 for line in lines:
     zones = line.split()
     day = 0
     for zone in zones:
-        data[day]["blocks"][block][stage] = zone
+        data[day]["blocks"][block]["stages"][stage]["zones"] = [zone]
         zoneSet.add(zone)
         day = day + 1
     stage = stage + 1
-    if stage == 9:
-        stage = 1
+    if stage == 8:
+        stage = 0
         block = block + 1
 
 zoneList = list(zoneSet)

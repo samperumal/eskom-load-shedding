@@ -13,8 +13,6 @@ def createBlockStages(block):
         "end": '{:0>2}:30'.format((block + 1) * 2), 
         "stages": [{"stage": stage, "zones":[]} for stage in range(1, 9)] 
     }
-    # for stage in range(1, 9):
-    #     block[str(stage)] = -1
 
     return block
 
@@ -41,15 +39,6 @@ for line in lines:
         data[day]["blocks"][blockNumber]["stages"][stageNumber]["zones"] = zones
         for zone in zones:
             zoneSet.add(zone)
-    # continue
-    # for zone in zones:
-    #     data[day]["blocks"][block][stage] = zone
-    #     zoneSet.add(zone)
-    #     day = day + 1
-    # stage = stage + 1
-    # if stage == 9:
-    #     stage = 1
-    #     block = block + 1
 
 zoneList = list(zoneSet)
 zoneList.sort(key = lambda x: int(x))
