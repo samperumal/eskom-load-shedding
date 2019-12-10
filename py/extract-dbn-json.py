@@ -30,15 +30,15 @@ for line in lines:
     block = parts[0]
     blockNumber = int(block[0:2]) // 2
     day = int(parts[5])
-    stages = [[str(y) for y in x.replace("\"", "").split(',')] for x in parts[1:5]]
+    stages = [[str(y) for y in x.replace("\"", "").split(',')][-1] for x in parts[1:5]]
     # print(blockNumber, block, stages, day)
     for stageNumber in range(8):
         if stageNumber  < len(stages):
-            zones = stages[stageNumber]
-        else: zones = stages[-1]
+            zones = [stages[stageNumber]]            
+        else: zones = []
         data[day]["blocks"][blockNumber]["stages"][stageNumber]["zones"] = zones
         for zone in zones:
-            zoneSet.add(zone)
+                zoneSet.add(zone)
 
 zoneList = list(zoneSet)
 zoneList.sort(key = lambda x: int(x))
