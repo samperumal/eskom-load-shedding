@@ -45,7 +45,7 @@
               <div
                 v-for="(block, bindex) in day.blocks"
                 :key="bindex"
-                :class="block.className"
+                class="stage6"
               >{{ block.blockLabel }}</div>
             </div>
           </div>
