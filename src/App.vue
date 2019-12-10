@@ -2,7 +2,7 @@
   <div id="app">
     <!-- <img width="25%" src="./assets/logo.png" /> -->
     <div class="columns">
-      <div class="column is-one-fifth">
+      <div class="column is-full-mobile is-one-third-tablet is-one-quarter-desktop">
         <div
           class="box is-size-5 has-text-weight-semibold"
         >{{ selectedCity }} Load Shedding Schedule</div>
@@ -51,7 +51,7 @@
           </div>
         </b-field>
       </div>
-      <div class="column">
+      <div class="column is-hidden-mobile">
         <ZoneGrid
           :selectedDaysData="selectedDaysData"
           :selectedDate="selectedDate"
@@ -60,8 +60,9 @@
         ></ZoneGrid>
       </div>
     </div>
-    <section>
-      <div></div>
+    <section class="footer">
+      <div>Developed by Sameshan Perumal</div>
+      <div><a href="https://datacartographer.com">https://datacartographer.com</a></div>
     </section>
   </div>
 </template>
@@ -152,7 +153,7 @@ export default Vue.extend({
             ) {
               dayData.blocks.push({
                 blockIndex: block.block,
-                blockLabel: `${block.start}-${block.end}`,
+                blockLabel: `${block.start} - ${block.end}`,
                 stageLabel: `Stage ${stageData.stage}`,
                 className: `stage${stageData.stage}`,
                 zone: this.selectedZone

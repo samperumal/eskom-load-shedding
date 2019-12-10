@@ -3,7 +3,9 @@
     <b-table :data="tableData">
       <template slot-scope="props">
         <b-table-column v-for="(column, index) in tableColumns" :key="index" :label="column.title">
-          <template v-if="column.field == 'block'">{{ props.row[column.field] }}</template>
+          <template v-if="column.field == 'block'">
+            <div>{{ props.row[column.field] }}</div>
+          </template>
           <template v-if="props.row[column.field] != null">
             <div class="zone" :class="props.row[column.field].className">
               {{ props.row[column.field].stageLabel }}
