@@ -51,13 +51,13 @@
           </div>
         </b-field>
       </div>
-      <div class="column">{{ matrixData }}
-        <!-- <ZoneGrid
-          :matrixData="matrixData"
+      <div class="column">
+        <ZoneGrid
+          :selectedDaysData="selectedDaysData"
           :selectedDate="selectedDate"
           :selectedZone="selectedZone"
           :selectedStage="selectedStage"
-        ></ZoneGrid>-->
+        ></ZoneGrid>
       </div>
     </div>
     <section>
@@ -132,6 +132,7 @@ export default Vue.extend({
         const currentDay = moment(localSelectedDate).add(dayOffset, "days");
 
         const dayData = {
+          dayIndex: dayOffset,
           label: currentDay.format("ddd Do MMM"),
           blocks: []
         };
