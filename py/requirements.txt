@@ -1,0 +1,2 @@
+pdfminer==20191125
+pycryptodome==3.9.4
