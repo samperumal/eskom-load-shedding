@@ -5,12 +5,15 @@
         <b-table-column v-for="(column, index) in tableColumns" :key="index" :label="column.title">
           <template v-if="column.field == 'block'">{{ props.row[column.field] }}</template>
           <template v-else>
-            <ZoneBlock
+            <!-- <ZoneBlock
               :zoneData="props.row[column.field]"
               :selectedZone="selectedZone"
               :selectedStage="selectedStage"
-            ></ZoneBlock>
+            ></ZoneBlock> -->
+            {{ column.field }}
+           {{ props.row[column.field] }} 
           </template>
+          <div style="color: red">{{props.row}}</div>
         </b-table-column>
       </template>
     </b-table>
