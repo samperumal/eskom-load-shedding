@@ -5,6 +5,8 @@ dist/
 !dist/index.html
 node_modules/
 *.log
+dotnet/
+.vscode/settings.json
 
 # OS generated files
 .DS_Store
