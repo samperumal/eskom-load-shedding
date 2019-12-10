@@ -7,8 +7,12 @@ def readLines():
         return lines[1:13] + lines[14:26] + lines[27:39] + lines[40:52] + lines[53:65] + lines[66:78] + lines[79:91]
 
 def createBlockStages(block):
-    block = { "block": block, 
-        "start": block * 2, "end": (block + 1) * 2, "stages": [{"stage": stage, "zones":[]} for stage in range(1, 9)] }
+    block = { 
+        "block": block, 
+        "start": '{:0>2}:00'.format(block * 2), 
+        "end": '{:0>2}:30'.format((block + 1) * 2), 
+        "stages": [{"stage": stage, "zones":[]} for stage in range(1, 9)] 
+    }
     # for stage in range(1, 9):
     #     block[str(stage)] = -1
 

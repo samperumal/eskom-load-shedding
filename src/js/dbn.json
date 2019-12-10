@@ -31,8 +31,8 @@
       "blocks": [
         {
           "block": 0,
-          "start": 0,
-          "end": 2,
+          "start": "00:00",
+          "end": "02:30",
           "stages": [
             {
               "stage": 1,
@@ -104,8 +104,8 @@
         },
         {
           "block": 1,
-          "start": 2,
-          "end": 4,
+          "start": "02:00",
+          "end": "04:30",
           "stages": [
             {
               "stage": 1,
@@ -177,8 +177,8 @@
         },
         {
           "block": 2,
-          "start": 4,
-          "end": 6,
+          "start": "04:00",
+          "end": "06:30",
           "stages": [
             {
               "stage": 1,
@@ -250,8 +250,8 @@
         },
         {
           "block": 3,
-          "start": 6,
-          "end": 8,
+          "start": "06:00",
+          "end": "08:30",
           "stages": [
             {
               "stage": 1,
@@ -323,8 +323,8 @@
         },
         {
           "block": 4,
-          "start": 8,
-          "end": 10,
+          "start": "08:00",
+          "end": "10:30",
           "stages": [
             {
               "stage": 1,
@@ -396,8 +396,8 @@
         },
         {
           "block": 5,
-          "start": 10,
-          "end": 12,
+          "start": "10:00",
+          "end": "12:30",
           "stages": [
             {
               "stage": 1,
@@ -469,8 +469,8 @@
         },
         {
           "block": 6,
-          "start": 12,
-          "end": 14,
+          "start": "12:00",
+          "end": "14:30",
           "stages": [
             {
               "stage": 1,
@@ -542,8 +542,8 @@
         },
         {
           "block": 7,
-          "start": 14,
-          "end": 16,
+          "start": "14:00",
+          "end": "16:30",
           "stages": [
             {
               "stage": 1,
@@ -615,8 +615,8 @@
         },
         {
           "block": 8,
-          "start": 16,
-          "end": 18,
+          "start": "16:00",
+          "end": "18:30",
           "stages": [
             {
               "stage": 1,
@@ -688,8 +688,8 @@
         },
         {
           "block": 9,
-          "start": 18,
-          "end": 20,
+          "start": "18:00",
+          "end": "20:30",
           "stages": [
             {
               "stage": 1,
@@ -761,8 +761,8 @@
         },
         {
           "block": 10,
-          "start": 20,
-          "end": 22,
+          "start": "20:00",
+          "end": "22:30",
           "stages": [
             {
               "stage": 1,
@@ -834,8 +834,8 @@
         },
         {
           "block": 11,
-          "start": 22,
-          "end": 24,
+          "start": "22:00",
+          "end": "24:30",
           "stages": [
             {
               "stage": 1,
@@ -912,8 +912,8 @@
       "blocks": [
         {
           "block": 0,
-          "start": 0,
-          "end": 2,
+          "start": "00:00",
+          "end": "02:30",
           "stages": [
             {
               "stage": 1,
@@ -985,8 +985,8 @@
         },
         {
           "block": 1,
-          "start": 2,
-          "end": 4,
+          "start": "02:00",
+          "end": "04:30",
           "stages": [
             {
               "stage": 1,
@@ -1058,8 +1058,8 @@
         },
         {
           "block": 2,
-          "start": 4,
-          "end": 6,
+          "start": "04:00",
+          "end": "06:30",
           "stages": [
             {
               "stage": 1,
@@ -1131,8 +1131,8 @@
         },
         {
           "block": 3,
-          "start": 6,
-          "end": 8,
+          "start": "06:00",
+          "end": "08:30",
           "stages": [
             {
               "stage": 1,
@@ -1204,8 +1204,8 @@
         },
         {
           "block": 4,
-          "start": 8,
-          "end": 10,
+          "start": "08:00",
+          "end": "10:30",
           "stages": [
             {
               "stage": 1,
@@ -1277,8 +1277,8 @@
         },
         {
           "block": 5,
-          "start": 10,
-          "end": 12,
+          "start": "10:00",
+          "end": "12:30",
           "stages": [
             {
               "stage": 1,
@@ -1350,8 +1350,8 @@
         },
         {
           "block": 6,
-          "start": 12,
-          "end": 14,
+          "start": "12:00",
+          "end": "14:30",
           "stages": [
             {
               "stage": 1,
@@ -1423,8 +1423,8 @@
         },
         {
           "block": 7,
-          "start": 14,
-          "end": 16,
+          "start": "14:00",
+          "end": "16:30",
           "stages": [
             {
               "stage": 1,
@@ -1496,8 +1496,8 @@
         },
         {
           "block": 8,
-          "start": 16,
-          "end": 18,
+          "start": "16:00",
+          "end": "18:30",
           "stages": [
             {
               "stage": 1,
@@ -1569,8 +1569,8 @@
         },
         {
           "block": 9,
-          "start": 18,
-          "end": 20,
+          "start": "18:00",
+          "end": "20:30",
           "stages": [
             {
               "stage": 1,
@@ -1642,8 +1642,8 @@
         },
         {
           "block": 10,
-          "start": 20,
-          "end": 22,
+          "start": "20:00",
+          "end": "22:30",
           "stages": [
             {
               "stage": 1,
@@ -1715,8 +1715,8 @@
         },
         {
           "block": 11,
-          "start": 22,
-          "end": 24,
+          "start": "22:00",
+          "end": "24:30",
           "stages": [
             {
               "stage": 1,
@@ -1793,8 +1793,8 @@
       "blocks": [
         {
           "block": 0,
-          "start": 0,
-          "end": 2,
+          "start": "00:00",
+          "end": "02:30",
           "stages": [
             {
               "stage": 1,
@@ -1866,8 +1866,8 @@
         },
         {
           "block": 1,
-          "start": 2,
-          "end": 4,
+          "start": "02:00",
+          "end": "04:30",
           "stages": [
             {
               "stage": 1,
@@ -1939,8 +1939,8 @@
         },
         {
           "block": 2,
-          "start": 4,
-          "end": 6,
+          "start": "04:00",
+          "end": "06:30",
           "stages": [
             {
               "stage": 1,
@@ -2012,8 +2012,8 @@
         },
         {
           "block": 3,
-          "start": 6,
-          "end": 8,
+          "start": "06:00",
+          "end": "08:30",
           "stages": [
             {
               "stage": 1,
@@ -2085,8 +2085,8 @@
         },
         {
           "block": 4,
-          "start": 8,
-          "end": 10,
+          "start": "08:00",
+          "end": "10:30",
           "stages": [
             {
               "stage": 1,
@@ -2158,8 +2158,8 @@
         },
         {
           "block": 5,
-          "start": 10,
-          "end": 12,
+          "start": "10:00",
+          "end": "12:30",
           "stages": [
             {
               "stage": 1,
@@ -2231,8 +2231,8 @@
         },
         {
           "block": 6,
-          "start": 12,
-          "end": 14,
+          "start": "12:00",
+          "end": "14:30",
           "stages": [
             {
               "stage": 1,
@@ -2304,8 +2304,8 @@
         },
         {
           "block": 7,
-          "start": 14,
-          "end": 16,
+          "start": "14:00",
+          "end": "16:30",
           "stages": [
             {
               "stage": 1,
@@ -2377,8 +2377,8 @@
         },
         {
           "block": 8,
-          "start": 16,
-          "end": 18,
+          "start": "16:00",
+          "end": "18:30",
           "stages": [
             {
               "stage": 1,
@@ -2450,8 +2450,8 @@
         },
         {
           "block": 9,
-          "start": 18,
-          "end": 20,
+          "start": "18:00",
+          "end": "20:30",
           "stages": [
             {
               "stage": 1,
@@ -2523,8 +2523,8 @@
         },
         {
           "block": 10,
-          "start": 20,
-          "end": 22,
+          "start": "20:00",
+          "end": "22:30",
           "stages": [
             {
               "stage": 1,
@@ -2596,8 +2596,8 @@
         },
         {
           "block": 11,
-          "start": 22,
-          "end": 24,
+          "start": "22:00",
+          "end": "24:30",
           "stages": [
             {
               "stage": 1,
@@ -2674,8 +2674,8 @@
       "blocks": [
         {
           "block": 0,
-          "start": 0,
-          "end": 2,
+          "start": "00:00",
+          "end": "02:30",
           "stages": [
             {
               "stage": 1,
@@ -2747,8 +2747,8 @@
         },
         {
           "block": 1,
-          "start": 2,
-          "end": 4,
+          "start": "02:00",
+          "end": "04:30",
           "stages": [
             {
               "stage": 1,
@@ -2820,8 +2820,8 @@
         },
         {
           "block": 2,
-          "start": 4,
-          "end": 6,
+          "start": "04:00",
+          "end": "06:30",
           "stages": [
             {
               "stage": 1,
@@ -2893,8 +2893,8 @@
         },
         {
           "block": 3,
-          "start": 6,
-          "end": 8,
+          "start": "06:00",
+          "end": "08:30",
           "stages": [
             {
               "stage": 1,
@@ -2966,8 +2966,8 @@
         },
         {
           "block": 4,
-          "start": 8,
-          "end": 10,
+          "start": "08:00",
+          "end": "10:30",
           "stages": [
             {
               "stage": 1,
@@ -3039,8 +3039,8 @@
         },
         {
           "block": 5,
-          "start": 10,
-          "end": 12,
+          "start": "10:00",
+          "end": "12:30",
           "stages": [
             {
               "stage": 1,
@@ -3112,8 +3112,8 @@
         },
         {
           "block": 6,
-          "start": 12,
-          "end": 14,
+          "start": "12:00",
+          "end": "14:30",
           "stages": [
             {
               "stage": 1,
@@ -3185,8 +3185,8 @@
         },
         {
           "block": 7,
-          "start": 14,
-          "end": 16,
+          "start": "14:00",
+          "end": "16:30",
           "stages": [
             {
               "stage": 1,
@@ -3258,8 +3258,8 @@
         },
         {
           "block": 8,
-          "start": 16,
-          "end": 18,
+          "start": "16:00",
+          "end": "18:30",
           "stages": [
             {
               "stage": 1,
@@ -3331,8 +3331,8 @@
         },
         {
           "block": 9,
-          "start": 18,
-          "end": 20,
+          "start": "18:00",
+          "end": "20:30",
           "stages": [
             {
               "stage": 1,
@@ -3404,8 +3404,8 @@
         },
         {
           "block": 10,
-          "start": 20,
-          "end": 22,
+          "start": "20:00",
+          "end": "22:30",
           "stages": [
             {
               "stage": 1,
@@ -3477,8 +3477,8 @@
         },
         {
           "block": 11,
-          "start": 22,
-          "end": 24,
+          "start": "22:00",
+          "end": "24:30",
           "stages": [
             {
               "stage": 1,
@@ -3555,8 +3555,8 @@
       "blocks": [
         {
           "block": 0,
-          "start": 0,
-          "end": 2,
+          "start": "00:00",
+          "end": "02:30",
           "stages": [
             {
               "stage": 1,
@@ -3628,8 +3628,8 @@
         },
         {
           "block": 1,
-          "start": 2,
-          "end": 4,
+          "start": "02:00",
+          "end": "04:30",
           "stages": [
             {
               "stage": 1,
@@ -3701,8 +3701,8 @@
         },
         {
           "block": 2,
-          "start": 4,
-          "end": 6,
+          "start": "04:00",
+          "end": "06:30",
           "stages": [
             {
               "stage": 1,
@@ -3774,8 +3774,8 @@
         },
         {
           "block": 3,
-          "start": 6,
-          "end": 8,
+          "start": "06:00",
+          "end": "08:30",
           "stages": [
             {
               "stage": 1,
@@ -3847,8 +3847,8 @@
         },
         {
           "block": 4,
-          "start": 8,
-          "end": 10,
+          "start": "08:00",
+          "end": "10:30",
           "stages": [
             {
               "stage": 1,
@@ -3920,8 +3920,8 @@
         },
         {
           "block": 5,
-          "start": 10,
-          "end": 12,
+          "start": "10:00",
+          "end": "12:30",
           "stages": [
             {
               "stage": 1,
@@ -3993,8 +3993,8 @@
         },
         {
           "block": 6,
-          "start": 12,
-          "end": 14,
+          "start": "12:00",
+          "end": "14:30",
           "stages": [
             {
               "stage": 1,
@@ -4066,8 +4066,8 @@
         },
         {
           "block": 7,
-          "start": 14,
-          "end": 16,
+          "start": "14:00",
+          "end": "16:30",
           "stages": [
             {
               "stage": 1,
@@ -4139,8 +4139,8 @@
         },
         {
           "block": 8,
-          "start": 16,
-          "end": 18,
+          "start": "16:00",
+          "end": "18:30",
           "stages": [
             {
               "stage": 1,
@@ -4212,8 +4212,8 @@
         },
         {
           "block": 9,
-          "start": 18,
-          "end": 20,
+          "start": "18:00",
+          "end": "20:30",
           "stages": [
             {
               "stage": 1,
@@ -4285,8 +4285,8 @@
         },
         {
           "block": 10,
-          "start": 20,
-          "end": 22,
+          "start": "20:00",
+          "end": "22:30",
           "stages": [
             {
               "stage": 1,
@@ -4358,8 +4358,8 @@
         },
         {
           "block": 11,
-          "start": 22,
-          "end": 24,
+          "start": "22:00",
+          "end": "24:30",
           "stages": [
             {
               "stage": 1,
@@ -4436,8 +4436,8 @@
       "blocks": [
         {
           "block": 0,
-          "start": 0,
-          "end": 2,
+          "start": "00:00",
+          "end": "02:30",
           "stages": [
             {
               "stage": 1,
@@ -4509,8 +4509,8 @@
         },
         {
           "block": 1,
-          "start": 2,
-          "end": 4,
+          "start": "02:00",
+          "end": "04:30",
           "stages": [
             {
               "stage": 1,
@@ -4582,8 +4582,8 @@
         },
         {
           "block": 2,
-          "start": 4,
-          "end": 6,
+          "start": "04:00",
+          "end": "06:30",
           "stages": [
             {
               "stage": 1,
@@ -4655,8 +4655,8 @@
         },
         {
           "block": 3,
-          "start": 6,
-          "end": 8,
+          "start": "06:00",
+          "end": "08:30",
           "stages": [
             {
               "stage": 1,
@@ -4728,8 +4728,8 @@
         },
         {
           "block": 4,
-          "start": 8,
-          "end": 10,
+          "start": "08:00",
+          "end": "10:30",
           "stages": [
             {
               "stage": 1,
@@ -4801,8 +4801,8 @@
         },
         {
           "block": 5,
-          "start": 10,
-          "end": 12,
+          "start": "10:00",
+          "end": "12:30",
           "stages": [
             {
               "stage": 1,
@@ -4874,8 +4874,8 @@
         },
         {
           "block": 6,
-          "start": 12,
-          "end": 14,
+          "start": "12:00",
+          "end": "14:30",
           "stages": [
             {
               "stage": 1,
@@ -4947,8 +4947,8 @@
         },
         {
           "block": 7,
-          "start": 14,
-          "end": 16,
+          "start": "14:00",
+          "end": "16:30",
           "stages": [
             {
               "stage": 1,
@@ -5020,8 +5020,8 @@
         },
         {
           "block": 8,
-          "start": 16,
-          "end": 18,
+          "start": "16:00",
+          "end": "18:30",
           "stages": [
             {
               "stage": 1,
@@ -5093,8 +5093,8 @@
         },
         {
           "block": 9,
-          "start": 18,
-          "end": 20,
+          "start": "18:00",
+          "end": "20:30",
           "stages": [
             {
               "stage": 1,
@@ -5166,8 +5166,8 @@
         },
         {
           "block": 10,
-          "start": 20,
-          "end": 22,
+          "start": "20:00",
+          "end": "22:30",
           "stages": [
             {
               "stage": 1,
@@ -5239,8 +5239,8 @@
         },
         {
           "block": 11,
-          "start": 22,
-          "end": 24,
+          "start": "22:00",
+          "end": "24:30",
           "stages": [
             {
               "stage": 1,
@@ -5317,8 +5317,8 @@
       "blocks": [
         {
           "block": 0,
-          "start": 0,
-          "end": 2,
+          "start": "00:00",
+          "end": "02:30",
           "stages": [
             {
               "stage": 1,
@@ -5390,8 +5390,8 @@
         },
         {
           "block": 1,
-          "start": 2,
-          "end": 4,
+          "start": "02:00",
+          "end": "04:30",
           "stages": [
             {
               "stage": 1,
@@ -5463,8 +5463,8 @@
         },
         {
           "block": 2,
-          "start": 4,
-          "end": 6,
+          "start": "04:00",
+          "end": "06:30",
           "stages": [
             {
               "stage": 1,
@@ -5536,8 +5536,8 @@
         },
         {
           "block": 3,
-          "start": 6,
-          "end": 8,
+          "start": "06:00",
+          "end": "08:30",
           "stages": [
             {
               "stage": 1,
@@ -5609,8 +5609,8 @@
         },
         {
           "block": 4,
-          "start": 8,
-          "end": 10,
+          "start": "08:00",
+          "end": "10:30",
           "stages": [
             {
               "stage": 1,
@@ -5682,8 +5682,8 @@
         },
         {
           "block": 5,
-          "start": 10,
-          "end": 12,
+          "start": "10:00",
+          "end": "12:30",
           "stages": [
             {
               "stage": 1,
@@ -5755,8 +5755,8 @@
         },
         {
           "block": 6,
-          "start": 12,
-          "end": 14,
+          "start": "12:00",
+          "end": "14:30",
           "stages": [
             {
               "stage": 1,
@@ -5828,8 +5828,8 @@
         },
         {
           "block": 7,
-          "start": 14,
-          "end": 16,
+          "start": "14:00",
+          "end": "16:30",
           "stages": [
             {
               "stage": 1,
@@ -5901,8 +5901,8 @@
         },
         {
           "block": 8,
-          "start": 16,
-          "end": 18,
+          "start": "16:00",
+          "end": "18:30",
           "stages": [
             {
               "stage": 1,
@@ -5974,8 +5974,8 @@
         },
         {
           "block": 9,
-          "start": 18,
-          "end": 20,
+          "start": "18:00",
+          "end": "20:30",
           "stages": [
             {
               "stage": 1,
@@ -6047,8 +6047,8 @@
         },
         {
           "block": 10,
-          "start": 20,
-          "end": 22,
+          "start": "20:00",
+          "end": "22:30",
           "stages": [
             {
               "stage": 1,
@@ -6120,8 +6120,8 @@
         },
         {
           "block": 11,
-          "start": 22,
-          "end": 24,
+          "start": "22:00",
+          "end": "24:30",
           "stages": [
             {
               "stage": 1,
