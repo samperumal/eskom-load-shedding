@@ -4,8 +4,13 @@
     <div class="columns">
       <div class="column is-one-fifth">
         <div class="box is-size-5 has-text-weight-semibold">
-          Cape Town Load Shedding Schedule
+          {{ selectedCity }} Load Shedding Schedule
         </div>
+        <b-field label="City" expanded>
+          <b-select placeholder="Select a zone" v-model="selectedCity" type="is-info" expanded>
+              <option v-for="option in this.cities" :value="option" :key="option">{{ option }}</option>
+            </b-select>
+        </b-field>
         <b-field label="Date" expanded>
           <b-datepicker
             placeholder="Click to select..."
@@ -16,7 +21,7 @@
         <b-field grouped group-multiline expanded>
           <b-field label="Zone" expanded>
             <b-select placeholder="Select a zone" v-model="selectedZone" type="is-info" expanded>
-              <option v-for="option in 16" :value="option" :key="option">Zone {{ option }}</option>
+              <option v-for="option in this.zones" :value="option" :key="option">Zone {{ option }}</option>
             </b-select>
           </b-field>
           <b-field label="Stage" expanded>
@@ -58,8 +63,11 @@
 import Vue from "vue";
 import ZoneGrid from "./components/ZoneGrid";
 import { createMatrix, modBase1 } from "./js/eskom-data";
+import jhbData from "./js/jhb.json";
 
 var moment = require("moment");
+
+const cptData = createMatrix();
 
 // console.log("Starting");
 // const data = createMatrix();
@@ -69,15 +77,36 @@ export default Vue.extend({
   data: function() {
     return {
       selectedDate: new Date(),
-      selectedZone: 11,
+      selectedZone: cptData.zones[0],
       selectedStage: 1,
-      matrixData: createMatrix()
+      selectedCity: "Cape Town",
+      matrixData: cptData.matrix,
+      zones: cptData.zones,
+      cities: ["Cape Town", "Johannesburg"]
     };
   },
   components: {
     ZoneGrid
   },
   props: {},
+  watch: {
+    selectedCity: function (val) {
+      if (val == "Cape Town") {
+        this.matrixData = cptData.matrix;
+        this.zones = cptData.zones;
+        this.selectedZone = cptData.zones[0];
+      }
+      else if (val == "Johannesburg") {
+        this.matrixData = jhbData.matrix;
+        this.zones = jhbData.zones;
+        this.selectedZone = jhbData.zones[0];
+      }
+      else throw Exception();
+    }
+  },
+  methods: {
+
+  },
   computed: {
     possibleStages: function() {
       const stages = [];

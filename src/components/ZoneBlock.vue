@@ -12,7 +12,7 @@ import Vue from "vue";
 export default Vue.extend({
   props: {
     zoneData: Object,
-    selectedZone: Number,
+    selectedZone: String,
     selectedStages: Array,
     selectedStage: Number
   } 

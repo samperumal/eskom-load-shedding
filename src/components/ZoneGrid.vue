@@ -41,7 +41,7 @@ export default Vue.extend({
   props: {
     matrixData: Array,
     selectedDate: Date,
-    selectedZone: Number,
+    selectedZone: String,
     selectedStage: Number
   },
   computed: {
