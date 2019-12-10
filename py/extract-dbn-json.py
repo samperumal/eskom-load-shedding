@@ -7,7 +7,8 @@ def readLines():
         return lines[1:13] + lines[14:26] + lines[27:39] + lines[40:52] + lines[53:65] + lines[66:78] + lines[79:91]
 
 def createBlockStages(block):
-    block = { "block": block, "start": block * 2, "end": (block + 1) * 2 }
+    block = { "block": block, 
+        "start": block * 2, "end": (block + 1) * 2, "stages": [{"stage": stage, "zones":[]} for stage in range(1, 9)] }
     # for stage in range(1, 9):
     #     block[str(stage)] = -1
 
@@ -15,8 +16,9 @@ def createBlockStages(block):
 
 lines = readLines()
 print(len(lines) /12)
+dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
-data = [{"day": day + 1, "blocks": [createBlockStages(block) for block in range(12)]} for day in range(31)]
+data = [{"day": dayNames[day], "blocks": [createBlockStages(block) for block in range(12)]} for day in range(7)]
 zoneSet = set()
 
 block = 0
@@ -27,10 +29,12 @@ for line in lines:
     blockNumber = int(block[0:2]) // 2
     day = int(parts[5])
     stages = [[str(y) for y in x.replace("\"", "").split(',')] for x in parts[1:5]]
-    print(blockNumber, block, stages, day)
-    for stageNumber in range(4):
-        zones = stages[stageNumber]
-        data[day]["blocks"][blockNumber][stageNumber + 1] = zones
+    # print(blockNumber, block, stages, day)
+    for stageNumber in range(8):
+        if stageNumber  < len(stages):
+            zones = stages[stageNumber]
+        else: zones = stages[-1]
+        data[day]["blocks"][blockNumber]["stages"][stageNumber]["zones"] = zones
         for zone in zones:
             zoneSet.add(zone)
     # continue
@@ -44,7 +48,7 @@ for line in lines:
     #     block = block + 1
 
 zoneList = list(zoneSet)
-zoneList.sort()
+zoneList.sort(key = lambda x: int(x))
 
 dbnData = {
     "zones": zoneList,
