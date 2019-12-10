@@ -51,7 +51,7 @@
           </div>
         </b-field>
       </div>
-      <div class="column">
+      <div class="column">{{ matrixData }}
         <!-- <ZoneGrid
           :matrixData="matrixData"
           :selectedDate="selectedDate"
@@ -61,7 +61,7 @@
       </div>
     </div>
     <section>
-      <div>{{ selectedDaysData }}</div>
+      <div></div>
     </section>
   </div>
 </template>
@@ -77,10 +77,6 @@ var moment = require("moment");
 
 const cptData = createMatrix();
 
-// console.log("Starting");
-// const data = createMatrix();
-// console.log(data);
-
 export default Vue.extend({
   data: function() {
     const data = {
@@ -93,10 +89,10 @@ export default Vue.extend({
       cities: ["Cape Town", "Johannesburg", "Durban"]
     };
 
-    data.selectedCity = "Durban";
-    data.possibleZones = dbnData.zones;
-    data.selectedZone = dbnData.zones[0];
-    data.matrixData = dbnData.matrix;
+    data.selectedCity = "Cape Town";
+    data.possibleZones = cptData.zones;
+    data.selectedZone = cptData.zones[0];
+    data.matrixData = cptData.matrix;
 
     return data;
   },
@@ -177,57 +173,8 @@ export default Vue.extend({
       }
 
       return daysResult;
-    },
-    validDays: function() {
-      const daysResult = [];
-      for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
-        daysResult.push(
-          moment(this.selectedDate)
-            .add(dayOffset, "days")
-            .date()
-        );
-      }
-      return daysResult;
-    },
-    activeBlocks: function() {
-      const validDays = this.validDays;
-      const daysResult = [];
-
-      for (const day of this.matrixData) {
-        if (!validDays.includes(day.day)) continue;
-
-        const blocksResult = [];
-
-        for (const blockIndex in day.blocks) {
-          const block = day.blocks[blockIndex];
-          for (const stage in block) {
-            const zone = block[stage];
-            if (zone != this.selectedZone) continue;
-            if (stage > this.selectedStage) continue;
-            blocksResult.push({
-              block: `${String(blockIndex * 2).padStart(2, "0")}:00 - ${String(
-                blockIndex * 2 + 2
-              ).padStart(2, "0")}:30`,
-              stage: `stage${stage}`
-            });
-          }
-        }
-
-        if (blocksResult.length == 0)
-          blocksResult = [{ block: "No load shedding", stage: "" }];
-
-        daysResult.push({
-          day: moment(this.selectedDate)
-            .date(day.day)
-            .format("ddd Do MMM"),
-          blocks: blocksResult
-        });
-      }
-
-      return daysResult;
     }
-  },
-  mounted: function() {}
+  }
 });
 </script>
 
