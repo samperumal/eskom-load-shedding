@@ -146,7 +146,7 @@ export default Vue.extend({
         if (this.selectedCity == "Durban") {
           blocks = this.matrixData[currentDay.day()].blocks;
         } else {
-          blocks = this.matrixData[currentDay.date()].blocks;
+          blocks = this.matrixData[currentDay.date() - 1].blocks;
         }
 
         for (const block of blocks) {
