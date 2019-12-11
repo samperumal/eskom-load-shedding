@@ -6,46 +6,48 @@
         <div
           class="box is-size-5 has-text-weight-semibold"
         >{{ selectedCity }} Load Shedding Schedule</div>
-        <b-field label="City" expanded>
-          <b-select placeholder="Select a zone" v-model="selectedCity" type="is-info" expanded>
-            <option v-for="option in this.cities" :value="option" :key="option">{{ option }}</option>
-          </b-select>
-        </b-field>
-        <b-field label="Date" expanded>
-          <b-datepicker
-            placeholder="Click to select..."
-            icon="calendar-today"
-            v-model="selectedDate"
-          ></b-datepicker>
-        </b-field>
-        <b-field grouped group-multiline expanded>
-          <b-field label="Zone" expanded>
-            <b-select placeholder="Select a zone" v-model="selectedZone" type="is-info" expanded>
-              <option
-                v-for="option in this.possibleZones"
-                :value="option"
-                :key="option"
-              >Zone {{ option }}</option>
+        <section>
+          <b-field label="City" label-position="on-border">
+            <b-select placeholder="Select a zone" v-model="selectedCity" type="is-info" expanded>
+              <option v-for="option in this.cities" :value="option" :key="option">{{ option }}</option>
             </b-select>
           </b-field>
-          <b-field label="Stage" expanded>
-            <b-select v-model="selectedStage" type="is-info" expanded>
-              <option
-                v-for="stage in possibleStages"
-                :value="stage.value"
-                :key="stage.key"
-              >{{ stage.label }}</option>
-            </b-select>
+          <b-field label="Date" label-position="on-border">
+            <b-datepicker
+              placeholder="Click to select..."
+              icon="calendar-today"
+              v-model="selectedDate"
+            ></b-datepicker>
           </b-field>
-        </b-field>
-        <b-field label="Summary" expanded>
+          <b-field grouped>
+            <b-field label="Zone" label-position="on-border" expanded>
+              <b-select placeholder="Select a zone" v-model="selectedZone" type="is-info" expanded>
+                <option
+                  v-for="option in this.possibleZones"
+                  :value="option"
+                  :key="option"
+                >Zone {{ option }}</option>
+              </b-select>
+            </b-field>
+            <b-field label="Stage" label-position="on-border" expanded>
+              <b-select v-model="selectedStage" type="is-info" expanded>
+                <option
+                  v-for="stage in possibleStages"
+                  :value="stage.value"
+                  :key="stage.key"
+                >{{ stage.label }}</option>
+              </b-select>
+            </b-field>
+          </b-field>
+        </section>
+        <b-field label="Summary">
           <div class="block">
             <div v-for="(day, dindex) in selectedDaysData" :key="dindex" class="block">
               <div class="day-summary">{{ day.label }}</div>
               <div
                 v-for="(block, bindex) in day.blocks"
                 :key="bindex"
-                class="stage6"
+                :class="block.className"
               >{{ block.blockLabel }}</div>
             </div>
           </div>
@@ -62,7 +64,9 @@
     </div>
     <section class="footer">
       <div>Developed by Sameshan Perumal</div>
-      <div><a href="https://datacartographer.com">https://datacartographer.com</a></div>
+      <div>
+        <a href="https://datacartographer.com">https://datacartographer.com</a>
+      </div>
     </section>
   </div>
 </template>

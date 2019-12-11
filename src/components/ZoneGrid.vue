@@ -1,13 +1,13 @@
 <template>
   <div class="wrapper">
-    <b-table :data="tableData">
+    <b-table :data="tableData" striped hoverable>
       <template slot-scope="props">
-        <b-table-column v-for="(column, index) in tableColumns" :key="index" :label="column.title">
+        <b-table-column v-for="(column, index) in tableColumns" :key="index" :label="column.title" centered>
           <template v-if="column.field == 'block'">
-            <div class="box is-white is-half-height">{{ props.row[column.field] }}</div>
+            <div class="box small-box is-white">{{ props.row[column.field] }}</div>
           </template>
           <template v-if="props.row[column.field] != null && column.field != 'block'">
-            <div class="zone box" :class="props.row[column.field].className">
+            <div class="zone box small-box" :class="props.row[column.field].className">
               {{ props.row[column.field].stageLabel }}
             </div>
           </template>
