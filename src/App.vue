@@ -59,6 +59,7 @@
           :selectedDate="selectedDate"
           :selectedZone="selectedZone"
           :selectedStage="selectedStage"
+          :blockTitles="blockTitles"
         ></ZoneGrid>
       </div>
     </div>
@@ -77,6 +78,7 @@ import ZoneGrid from "./components/ZoneGrid";
 import { createMatrix, modBase1 } from "./js/eskom-data";
 import jhbData from "./js/jhb.json";
 import dbnData from "./js/dbn.json";
+import ptaData from "./js/pta.json";
 
 var moment = require("moment");
 
@@ -91,7 +93,7 @@ export default Vue.extend({
       possibleZones: [],
       matrixData: [],
       selectedCity: null,
-      cities: ["Cape Town", "Johannesburg", "Durban"]
+      cities: ["Cape Town", "Johannesburg", "Durban", "Pretoria"]
     };
 
     data.selectedCity = "Cape Town";
@@ -111,6 +113,7 @@ export default Vue.extend({
       if (val == "Cape Town") dataSource = cptData;
       else if (val == "Johannesburg") dataSource = jhbData;
       else if (val == "Durban") dataSource = dbnData;
+      else if (val == "Pretoria") dataSource = ptaData;
       else throw Exception();
 
       this.possibleZones = dataSource.zones;
@@ -129,6 +132,11 @@ export default Vue.extend({
           value: i
         });
       return stages;
+    },
+    blockTitles: function() {
+      return this.matrixData[0].blocks
+        .reduce((acc, block) => [...acc, `${block.start} - ${block.end}`], [])
+        .sort((a, b) => parseInt(a.slice(0,2)) - parseInt(b.slice(0,2)))
     },
     selectedDaysData: function() {
       const localSelectedDate = this.selectedDate;

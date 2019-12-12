@@ -38,7 +38,8 @@ export default Vue.extend({
     selectedDaysData: Array,
     selectedDate: Date,
     selectedZone: String,
-    selectedStage: Number
+    selectedStage: Number,
+    blockTitles: Array
   },
   computed: {
     tableColumns: function() {
@@ -58,7 +59,7 @@ export default Vue.extend({
       for (let blockIndex = 0; blockIndex < 12; blockIndex += 1) {
         const row = {};
         
-        row["block"] = `${String(blockIndex * 2).padStart(2, '0')}:00 - ${String(blockIndex * 2 + 2).padStart(2, '0')}:30`;
+        row["block"] = this.blockTitles[blockIndex]
         
         rows.push(row);
       }
