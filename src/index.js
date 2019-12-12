@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Buefy from "buefy";
 import App from './App';
-import checkStage from './js/coct.js';
 import axios from 'axios';
 
 const moment = require("moment");

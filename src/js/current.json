@@ -1,0 +1,9 @@
+{
+    "Cape Town": {
+        "stage": "2",
+        "site" : "City of Cape Town",
+        "url"  : "https://www.capetown.gov.za/Family%20and%20home/Residential-utility-services/Residential-electricity-services/Load-shedding-and-outages"
+    },
+    "Johannesburg": null,
+    "Durban": null
+}
