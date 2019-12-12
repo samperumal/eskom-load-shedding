@@ -8,6 +8,8 @@ node_modules/
 dotnet/
 .vscode/settings.json
 py/venv/
+__pycache__
+py/.vscode/
 
 # OS generated files
 .DS_Store

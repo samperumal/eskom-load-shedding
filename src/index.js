@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Buefy from "buefy";
 import App from './App';
+import checkStage from './js/coct.js';
+import axios from 'axios';
 
 const moment = require("moment");
 
@@ -11,5 +13,25 @@ Vue.config.productionTip = false;
 
 new Vue({
   el: '#app',
-  render: h => h(App),
+  data() {
+    return {
+      currentStage: {
+        "Cape Town": null,
+        "Johannesburg": null,
+        "Durban": null
+      }
+    }
+  },
+  render: function (h) { return h(App, { props: { currentStage: this.currentStage } }); },
+  mounted: function () {
+    //checkStage();
+    axios({
+      method: "get",
+      url: "https://cptloadshed.blob.core.windows.net/stage/current.json",
+      headers: { "x-metaplex": "loadshed" }
+    })
+      .then((response) => {
+        this.currentStage = response.data;
+      });
+  }
 });

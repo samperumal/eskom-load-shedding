@@ -6,6 +6,11 @@
         <div
           class="box is-size-5 has-text-weight-semibold"
         >{{ selectedCity }} Load Shedding Schedule</div>
+        <div v-if="this.currentCityStage != null" class="box" :class="'stage' + this.currentCityStage.stage">
+          <div>Stage {{ currentCityStage.stage}}</div>
+          <div class="is-size-7">(Source <a :href="currentCityStage.url">{{ currentCityStage.site }}</a> website)</div>
+        </div>
+        <div v-else class="box">Current stage is unknown</div>
         <section>
           <b-field label="City" label-position="on-border">
             <b-select placeholder="Select a zone" v-model="selectedCity" type="is-info" expanded>
@@ -106,7 +111,9 @@ export default Vue.extend({
   components: {
     ZoneGrid
   },
-  props: {},
+  props: {
+    currentStage: Object
+  },
   watch: {
     selectedCity: function(val) {
       let dataSource = null;
@@ -137,6 +144,22 @@ export default Vue.extend({
       return this.matrixData[0].blocks
         .reduce((acc, block) => [...acc, `${block.start} - ${block.end}`], [])
         .sort((a, b) => parseInt(a.slice(0,2)) - parseInt(b.slice(0,2)))
+    },
+    currentCityStage: function() {
+      if (this.currentStage != null && this.currentStage[this.selectedCity] != null) {
+        const stageData = this.currentStage[this.selectedCity];
+        this.selectedStage = stageData.stage * 1;
+        return stageData;
+      }
+      else {
+        this.selectedStage = 0;
+        return null;
+      }
+    },
+    currentCityStageText: function() {
+      if (this.currentStage != null && this.currentStage[this.selectedCity] != null && this.currentStage[this.selectedCity].stage != null)
+        return this.currentStage[this.selectedCity];//`The ${this.selectedCity} website reports that Stage ${this.currentStage[this.selectedCity]} load shedding is in effect`;
+      else return "Unknown";
     },
     selectedDaysData: function() {
       const localSelectedDate = this.selectedDate;
