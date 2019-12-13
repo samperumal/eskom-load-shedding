@@ -1,0 +1,24 @@
+{
+  "Cape Town": {
+    "stage": "2",
+    "site": "City of Cape Town",
+    "url": "https://www.capetown.gov.za/Family%20and%20home/Residential-utility-services/Residential-electricity-services/Load-shedding-and-outages",
+    "text": "stage 2 active",
+    "time": "11:28"
+  },
+  "Johannesburg": {
+    "stage": "2",
+    "site": "City Power",
+    "url": "https://www.citypower.co.za/customers/Pages/Load_Shedding_Downloads.aspx",
+    "text": "Stage 2\u00a0\u00a0(in-progress)",
+    "time": "11:28"
+  },
+  "Durban": null,
+  "Tshwane (Pretoria)": {
+    "stage": "2",
+    "site": "City of Tshwane",
+    "url": "http://www.tshwane.gov.za/sites/Departments/Public-works-and-infrastructure/Pages/Load-Shedding.aspx",
+    "text": "Load Shedding Stage 2 is in progress",
+    "time": "11:28"
+  }
+}
