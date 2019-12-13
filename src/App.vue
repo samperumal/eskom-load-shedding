@@ -73,6 +73,14 @@
       <div>
         <a href="https://datacartographer.com">https://datacartographer.com</a>
       </div>
+      <div class="acknowledgments is-size-6">
+        <div>Acknowledgments</div>
+        <div class="acknowledgments-detail">
+          <div>Developed with <a href="https://vuejs.org/">Vue</a>, <a href="https://bulma.io/">Bulma</a> and <a href="https://buefy.org/">Buefy</a>, hosted by <a href="https://www.netlify.com
+">Netlify</a></div>
+          <div>Tshwane (Pretoria) data provided by Kobus Viljoen</div>
+        </div>
+      </div>
     </section>
   </div>
 </template>
@@ -236,5 +244,19 @@ export default Vue.extend({
   padding-left: 1em;
   padding-right: 1em;
   margin-top: 20px;
+}
+
+div.acknowledgments {
+  margin-top: 1em;
+  color: darkgray;
+
+}
+
+div.acknowledgments-detail {
+  display: none;
+}
+
+div.acknowledgments:hover div.acknowledgments-detail {
+  display: block;
 }
 </style>

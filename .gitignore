@@ -12,6 +12,7 @@ __pycache__
 py/.vscode/
 py/key.txt
 py/geckodriver*
+py/current.json
 
 # OS generated files
 .DS_Store
