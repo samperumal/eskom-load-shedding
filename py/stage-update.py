@@ -1,8 +1,5 @@
 import json
-
-def parseCoCTSite():
-
-    return None
+import coct
 
 def writeBlob(key):
     from azure.storage.blob import BlobServiceClient
@@ -12,7 +9,7 @@ def writeBlob(key):
     blob = service.get_blob_client("stage", "current.json")
 
     data = {
-        "Cape Town": parseCoCTSite(),
+        "Cape Town": coct.parseSite(),
         "Johannesburg": None,
         "Durban": None
     }
@@ -26,5 +23,5 @@ def writeBlob(key):
     print("Successfully wrote blob")
 
 key = ""
-
-writeBlob(key)
+print(coct.parseSite())
+#writeBlob(key)
