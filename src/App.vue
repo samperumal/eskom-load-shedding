@@ -8,7 +8,7 @@
         >{{ selectedCity }} Load Shedding Schedule</div>
         <div v-if="this.currentCityStage != null" class="box" :class="'stage' + this.currentCityStage.stage">
           <div>Stage {{ currentCityStage.stage}}</div>
-          <div class="is-size-7">(Source <a :href="currentCityStage.url">{{ currentCityStage.site }}</a> website)</div>
+          <div class="is-size-7">(Source <a :href="currentCityStage.url">{{ currentCityStage.site }}</a> website at {{ currentCityStage.time }})</div>
         </div>
         <div v-else class="box">Current stage is unknown</div>
         <section>
@@ -98,7 +98,7 @@ export default Vue.extend({
       possibleZones: [],
       matrixData: [],
       selectedCity: null,
-      cities: ["Cape Town", "Johannesburg", "Durban", "Pretoria"]
+      cities: ["Cape Town", "Johannesburg", "Durban", "Tshwane (Pretoria)"]
     };
 
     data.selectedCity = "Cape Town";
@@ -120,7 +120,7 @@ export default Vue.extend({
       if (val == "Cape Town") dataSource = cptData;
       else if (val == "Johannesburg") dataSource = jhbData;
       else if (val == "Durban") dataSource = dbnData;
-      else if (val == "Pretoria") dataSource = ptaData;
+      else if (val == "Tshwane (Pretoria)") dataSource = ptaData;
       else throw Exception();
 
       this.possibleZones = dataSource.zones;

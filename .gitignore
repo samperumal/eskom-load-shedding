@@ -11,6 +11,7 @@ py/venv/
 __pycache__
 py/.vscode/
 py/key.txt
+py/geckodriver*
 
 # OS generated files
 .DS_Store

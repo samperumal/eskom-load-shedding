@@ -1,5 +1,5 @@
 import json
-import coct
+import city_sites
 
 def writeBlob(key):
     from azure.storage.blob import BlobServiceClient
@@ -9,9 +9,10 @@ def writeBlob(key):
     blob = service.get_blob_client("stage", "current.json")
 
     data = {
-        "Cape Town": coct.parseSite(),
-        "Johannesburg": None,
-        "Durban": None
+        "Cape Town": city_sites.parseCpt(),
+        "Johannesburg": city_sites.parseJhb(),
+        "Durban": None,
+        "Tshwane (Pretoria)": city_sites.parsePta()
     }
 
     with open("current.json", "w") as fout:
