@@ -22,6 +22,7 @@ def writeBlob(key):
 
     print("Successfully wrote blob")
 
-key = ""
-print(coct.parseSite())
-#writeBlob(key)
+if __name__ == "__main__":
+    with open("key.txt", "r") as key_file:
+        key = key_file.read()
+        writeBlob(key)
