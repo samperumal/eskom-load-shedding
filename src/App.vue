@@ -134,6 +134,23 @@ export default Vue.extend({
       this.possibleZones = dataSource.zones;
       this.selectedZone = dataSource.zones[0];
       this.matrixData = dataSource.matrix;
+
+      localStorage.setItem("selectedCity", val);
+    },
+    selectedZone: function(val) {
+      if (!val) return;
+      localStorage.setItem("selectedZone", val);
+    }
+  },
+  mounted: function () {
+    if (localStorage.getItem("selectedCity")) {
+      this.$nextTick(() => {
+        this.selectedCity = localStorage.getItem("selectedCity");
+
+        if (localStorage.getItem("selectedZone")) {
+          this.$nextTick(() => this.selectedZone = localStorage.getItem("selectedZone"))
+        }
+      })
     }
   },
   methods: {},
