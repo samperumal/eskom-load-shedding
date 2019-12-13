@@ -2,9 +2,11 @@ import wget
 import re
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
-from datetime import datetime
+from datetime import datetime, timezone
+import pytz
 
-time_string = datetime.now().strftime("%H:%M")
+tz = pytz.timezone('Africa/Johannesburg')
+time_string = datetime.now(tz).strftime("%H:%M")
 
 def parseCpt():
     url = "https://www.capetown.gov.za/Family%20and%20home/Residential-utility-services/Residential-electricity-services/Load-shedding-and-outages"
