@@ -1,5 +1,7 @@
 import wget
 import re
+import sys
+
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from datetime import datetime, timezone
@@ -13,34 +15,37 @@ def parseGeneric(url, site, parser):
     options.add_argument('--headless')
 
     browser = webdriver.Firefox(options=options)
-    browser.set_page_load_timeout(30)
+    browser.set_page_load_timeout(90)
     print("Retrieving Url")
     browser.get(url)
 
     print("Parsing page")
-    match = parser(browser)
-
+    try:
+        (stage, text) = parser(browser)
+    except:
+        print(sys.exc_info())
+        return None
+    finally:
     browser.quit()
 
-    if match != None:
-        print(match)
         return {
-            "stage": match.group(1),
+        "stage": None if stage is None else str(stage * 1),
             "site" : site,
             "url"  : url,
-            "text" : match.group(0),
+        "text" : text,
             "time" : time_string
         }
-    else: return None
 
 def parseCpt():
     url = "https://www.capetown.gov.za/Family%20and%20home/Residential-utility-services/Residential-electricity-services/Load-shedding-and-outages"
     
     def parser(browser):
         element = browser.find_element_by_class_name("ExternalClass898DBDD1A6E04104B2A22756904464A5")
-        text = element.get_attribute('innerHTML')
-        match = re.search("stage (\d) active", text, re.IGNORECASE)
-        return match
+        text = element.get_attribute('innerText')
+        match = re.search("stage\W+(\d+)\W+active(\W+from\W+\d+:\d+\W+(\d+:\d+))?", text, re.IGNORECASE)
+        
+        if match != None: return (match.group(1), match.group(0))
+        else: return (None, None)
 
     return parseGeneric(url, "City of Cape Town", parser)
 
@@ -54,8 +59,10 @@ def parseJhb():
         element1 = browser.find_element_by_id("MSOZoneCell_WebPartWPQ3")
         element2 = element1.find_element_by_class_name("ms-rtestate-field")
         text = element2.get_attribute('innerText')
-        match = re.search("stage\W(\d)\W+\(in-progress\)", text, re.IGNORECASE)
-        return match
+        match = re.search("stage\W(\d+)\W+\(in-progress\)", text, re.IGNORECASE)
+        
+        if match != None: return (match.group(1), match.group(0))
+        else: return (None, None)
         
     return parseGeneric(url, "City Power", parser)
 
@@ -65,8 +72,10 @@ def parsePta():
     def parser(browser):
         element = browser.find_element_by_id("status")
         text = element.get_attribute('innerHTML')
-        match = re.search("Load Shedding Stage (\d) is in progress", text, re.IGNORECASE)
-        return match
+        match = re.search("Load\W+Shedding\W+Stage\W+(\d+)is\W+in\W+progress", text, re.IGNORECASE)
+        
+        if match != None: return (match.group(1), match.group(0))
+        else: return (None, None)
     
     return parseGeneric(url, "City of Tshwane", parser)
 
