@@ -26,15 +26,15 @@ def parseGeneric(url, site, parser):
         print(sys.exc_info())
         return None
     finally:
-    browser.quit()
+        browser.quit()
 
-        return {
+    return {
         "stage": None if stage is None else str(stage * 1),
-            "site" : site,
-            "url"  : url,
+        "site" : site,
+        "url"  : url,
         "text" : text,
-            "time" : time_string
-        }
+        "time" : time_string
+    }
 
 def parseCpt():
     url = "https://www.capetown.gov.za/Family%20and%20home/Residential-utility-services/Residential-electricity-services/Load-shedding-and-outages"
