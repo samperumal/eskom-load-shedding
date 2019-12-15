@@ -6,9 +6,22 @@
         <div
           class="box is-size-5 has-text-weight-semibold"
         >{{ selectedCity }} Load Shedding Schedule</div>
-        <div v-if="this.currentCityStage != null" class="box" :class="'stage' + this.currentCityStage.stage">
-          <div>Stage {{ currentCityStage.stage}}</div>
-          <div class="is-size-7">(Source <a :href="currentCityStage.url">{{ currentCityStage.site }}</a> website at {{ currentCityStage.time }})</div>
+        <div
+          v-if="this.currentCityStage != null"
+          class="box"
+          :class="'stage' + this.currentCityStage.stage"
+        >
+          <div>
+            {{ currentCityStage.stage != null ? `Stage ${currentCityStage.stage}` : "Load shedding suspended"}}
+            <!-- <button class="button" :class="'stage' + this.currentCityStage.stage" style="margin-left: 0.5em; vertical-align:middle;">
+              <b-icon icon="sync"></b-icon>
+            </button> -->
+          </div>
+          <div class="is-size-7" style="margin-top: 1em;">
+            (Source
+            <a :href="currentCityStage.url">{{ currentCityStage.site }}</a>
+            website at {{ currentCityStage.time }})
+          </div>
         </div>
         <div v-else class="box">Current stage is unknown</div>
         <section>
@@ -76,8 +89,14 @@
       <div class="acknowledgments is-size-6">
         <div>Acknowledgments</div>
         <div class="acknowledgments-detail">
-          <div>Developed with <a href="https://vuejs.org/">Vue</a>, <a href="https://bulma.io/">Bulma</a> and <a href="https://buefy.org/">Buefy</a>, hosted by <a href="https://www.netlify.com
-">Netlify</a></div>
+          <div>
+            Developed with
+            <a href="https://vuejs.org/">Vue</a>,
+            <a href="https://bulma.io/">Bulma</a> and
+            <a href="https://buefy.org/">Buefy</a>, hosted by
+            <a href="https://www.netlify.com
+">Netlify</a>
+          </div>
           <div>Tshwane (Pretoria) data provided by Kobus Viljoen</div>
         </div>
       </div>
@@ -88,6 +107,7 @@
 <script>
 import Vue from "vue";
 import ZoneGrid from "./components/ZoneGrid";
+import axios from "axios";
 import { createMatrix, modBase1 } from "./js/eskom-data";
 import jhbData from "./js/jhb.json";
 import dbnData from "./js/dbn.json";
@@ -106,7 +126,13 @@ export default Vue.extend({
       possibleZones: [],
       matrixData: [],
       selectedCity: null,
-      cities: ["Cape Town", "Johannesburg", "Durban", "Tshwane (Pretoria)"]
+      cities: ["Cape Town", "Johannesburg", "Durban", "Tshwane (Pretoria)"],
+      currentStage: {
+        "Cape Town": null,
+        Johannesburg: null,
+        Durban: null,
+        "Tshwane (Pretoria)": null
+      }
     };
 
     data.selectedCity = "Cape Town";
@@ -116,12 +142,14 @@ export default Vue.extend({
 
     return data;
   },
+  mounted: function() {
+    console.log("Mounted");
+    this.updateStage();
+  },
   components: {
     ZoneGrid
   },
-  props: {
-    currentStage: Object
-  },
+  props: {},
   watch: {
     selectedCity: function(val) {
       let dataSource = null;
@@ -136,7 +164,17 @@ export default Vue.extend({
       this.matrixData = dataSource.matrix;
     }
   },
-  methods: {},
+  methods: {
+    updateStage: function() {
+      axios({
+        method: "get",
+        url: "https://cptloadshed.blob.core.windows.net/stage/current.json",
+        headers: { "x-metaplex": "loadshed" }
+      }).then(response => {
+        this.currentStage = response.data;
+      });
+    }
+  },
   computed: {
     possibleStages: function() {
       const stages = [];
@@ -151,22 +189,29 @@ export default Vue.extend({
     blockTitles: function() {
       return this.matrixData[0].blocks
         .reduce((acc, block) => [...acc, `${block.start} - ${block.end}`], [])
-        .sort((a, b) => parseInt(a.slice(0,2)) - parseInt(b.slice(0,2)))
+        .sort((a, b) => parseInt(a.slice(0, 2)) - parseInt(b.slice(0, 2)));
     },
     currentCityStage: function() {
-      if (this.currentStage != null && this.currentStage[this.selectedCity] != null) {
+      if (
+        this.currentStage != null &&
+        this.currentStage[this.selectedCity] != null
+      ) {
         const stageData = this.currentStage[this.selectedCity];
         this.selectedStage = stageData.stage * 1;
         return stageData;
-      }
-      else {
+      } else {
         this.selectedStage = 0;
         return null;
       }
     },
     currentCityStageText: function() {
-      if (this.currentStage != null && this.currentStage[this.selectedCity] != null && this.currentStage[this.selectedCity].stage != null)
-        return this.currentStage[this.selectedCity];//`The ${this.selectedCity} website reports that Stage ${this.currentStage[this.selectedCity]} load shedding is in effect`;
+      if (
+        this.currentStage != null &&
+        this.currentStage[this.selectedCity] != null &&
+        this.currentStage[this.selectedCity].stage != null
+      )
+        return this.currentStage[this.selectedCity];
+      //`The ${this.selectedCity} website reports that Stage ${this.currentStage[this.selectedCity]} load shedding is in effect`;
       else return "Unknown";
     },
     selectedDaysData: function() {
@@ -249,7 +294,6 @@ export default Vue.extend({
 div.acknowledgments {
   margin-top: 1em;
   color: darkgray;
-
 }
 
 div.acknowledgments-detail {
