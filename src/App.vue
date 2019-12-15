@@ -13,9 +13,16 @@
         >
           <div>
             {{ currentCityStage.stage != null ? `Stage ${currentCityStage.stage}` : "Load shedding suspended"}}
-            <!-- <button class="button" :class="'stage' + this.currentCityStage.stage" style="margin-left: 0.5em; vertical-align:middle;">
-              <b-icon icon="sync"></b-icon>
-            </button> -->
+            <b-button
+              class="button"
+              :class="'stage' + this.currentCityStage.stage"
+              size=""
+              style="margin-left: 0.5em; vertical-align:middle;"
+              pack="fas"
+              icon-left="sync-alt"
+              :custom-class="this.loading ? 'spin' : ''"
+              @click="updateStage"
+            ></b-button>
           </div>
           <div class="is-size-7" style="margin-top: 1em;">
             (Source
@@ -33,7 +40,7 @@
           <b-field label="Date" label-position="on-border">
             <b-datepicker
               placeholder="Click to select..."
-              icon="calendar-today"
+              icon="calendar-alt"
               v-model="selectedDate"
             ></b-datepicker>
           </b-field>
@@ -117,6 +124,8 @@ var moment = require("moment");
 
 const cptData = createMatrix();
 
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 export default Vue.extend({
   data: function() {
     const data = {
@@ -132,7 +141,8 @@ export default Vue.extend({
         Johannesburg: null,
         Durban: null,
         "Tshwane (Pretoria)": null
-      }
+      },
+      loading: false
     };
 
     data.selectedCity = "Cape Town";
@@ -166,13 +176,20 @@ export default Vue.extend({
   },
   methods: {
     updateStage: function() {
-      axios({
-        method: "get",
-        url: "https://cptloadshed.blob.core.windows.net/stage/current.json",
-        headers: { "x-metaplex": "loadshed" }
-      }).then(response => {
-        this.currentStage = response.data;
-      });
+      if (!this.loading) {
+        this.loading = true;
+        console.log("loading");
+        axios({
+          method: "get",
+          url: "https://cptloadshed.blob.core.windows.net/stage/current.json",
+          headers: { "x-metaplex": "loadshed" }
+        })
+        .then(response => {
+          this.currentStage = response.data;
+          this.loading = false;
+          console.log("loaded");
+        });
+      }
     }
   },
   computed: {
