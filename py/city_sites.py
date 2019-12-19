@@ -15,12 +15,12 @@ def parseGeneric(url, site, parser):
     options.add_argument('--headless')
 
     browser = webdriver.Firefox(options=options)
-    browser.set_page_load_timeout(90)
-    print("Retrieving Url")
-    browser.get(url)
-
-    print("Parsing page")
     try:
+        browser.set_page_load_timeout(90)
+        print("Retrieving Url")
+        browser.get(url)
+
+        print("Parsing page")
         (stage, text) = parser(browser)
     except:
         print(sys.exc_info())
