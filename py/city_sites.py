@@ -72,7 +72,7 @@ def parsePta():
     def parser(browser):
         element = browser.find_element_by_id("status")
         text = element.get_attribute('innerHTML')
-        match = re.search("Load\W+Shedding\W+Stage\W+(\d+)is\W+in\W+progress", text, re.IGNORECASE)
+        match = re.search("Load\W+Shedding\W+Stage\W+(\d+)\W+is\W+in\W+progress", text, re.IGNORECASE)
         
         if match != None: return (match.group(1), match.group(0))
         else: return (None, None)
