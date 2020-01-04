@@ -169,22 +169,27 @@ export default Vue.extend({
       this.selectedZone = dataSource.zones[0];
       this.matrixData = dataSource.matrix;
 
-      localStorage.setItem("selectedCity", val);
+      if (val)
+        localStorage.setItem("selectedCity", val);
     },
     selectedZone: function(val) {
-      if (!val) return;
-      localStorage.setItem("selectedZone", val);
+      if (val)
+        localStorage.setItem("selectedZone", val);
     }
   },
   mounted: function () {
-    if (localStorage.getItem("selectedCity")) {
+    // Attempt to set selected city and zone from saved value in local storage
+    const lsSelectedCity = localStorage.getItem("selectedCity");
+    const lsSelectedZone = localStorage.getItem("selectedZone");
+    if (lsSelectedCity || lsSelectedZone) {
+      // Update selected city on next tick to avoid conflicts with initial values
       this.$nextTick(() => {
-        this.selectedCity = localStorage.getItem("selectedCity");
-
-        if (localStorage.getItem("selectedZone")) {
-          this.$nextTick(() => this.selectedZone = localStorage.getItem("selectedZone"))
-        }
-      })
+        if (lsSelectedCity) this.selectedCity = lsSelectedCity;
+        // Set zone on next tick to avoid default cascade behaviour of city change
+        if (lsSelectedZone) this.$nextTick(() => {
+          this.selectedZone = lsSelectedZone;
+        });
+      });
     }
 
     this.updateStage();
@@ -193,7 +198,7 @@ export default Vue.extend({
     updateStage: function() {
       if (!this.loading) {
         this.loading = true;
-        console.log("loading");
+        
         axios({
           method: "get",
           url: "https://cptloadshed.blob.core.windows.net/stage/current.json",
@@ -202,7 +207,6 @@ export default Vue.extend({
         .then(response => {
           this.currentStage = response.data;
           this.loading = false;
-          console.log("loaded");
         });
       }
     }
