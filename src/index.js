@@ -5,10 +5,10 @@ const moment = require("moment");
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 // internal icons
-import { faSyncAlt, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
+import { faSyncAlt, faCalendarAlt, faArrowUp, faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faSyncAlt, faCalendarAlt);
+library.add(faSyncAlt, faCalendarAlt, faArrowUp, faAngleLeft, faAngleRight);
 Vue.component('vue-fontawesome', FontAwesomeIcon);
 
 
