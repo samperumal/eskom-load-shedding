@@ -59,7 +59,7 @@ def parseJhb():
         element1 = browser.find_element_by_id("MSOZoneCell_WebPartWPQ3")
         element2 = element1.find_element_by_class_name("ms-rtestate-field")
         text = element2.get_attribute('innerText')
-        match = re.search("stage\W(\d+)\W+\(in-progress\)", text, re.IGNORECASE)
+        match = re.search("stage\W+(\d+)\W+(in-progress|is\W+in\W+progress)", text, re.IGNORECASE)
         
         if match != None: return (match.group(1), match.group(0))
         else: return (None, None)
@@ -80,6 +80,6 @@ def parsePta():
     return parseGeneric(url, "City of Tshwane", parser)
 
 if __name__ == "__main__":
-    parseCpt() 
-    parseJhb()
-    parsePta()
+    print(parseCpt())
+    print(parseJhb())
+    print(parsePta())
