@@ -1,6 +1,7 @@
 import wget
 import re
 import sys
+import time
 
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
@@ -16,7 +17,7 @@ def parseGeneric(url, site, parser):
 
     browser = webdriver.Firefox(options=options)
     try:
-        browser.set_page_load_timeout(90)
+        browser.set_page_load_timeout(120)
         print("Retrieving Url")
         browser.get(url)
 
@@ -40,6 +41,9 @@ def parseCpt():
     url = "https://www.capetown.gov.za/Family%20and%20home/Residential-utility-services/Residential-electricity-services/Load-shedding-and-outages"
     
     def parser(browser):
+        print("Sleeping")
+        time.sleep(180) # Wait for onLoad scripts to complete
+        print("Processing CPT site")
         element = browser.find_element_by_class_name("ExternalClass898DBDD1A6E04104B2A22756904464A5")
         text = element.get_attribute('innerText')
         match = re.search("stage\W+(\d+)\W+active(\W+from\W+\d+:\d+\W+(\d+:\d+))?", text, re.IGNORECASE)
@@ -47,7 +51,12 @@ def parseCpt():
         if match != None: return (match.group(1), match.group(0))
         else: return (None, None)
 
-    return parseGeneric(url, "City of Cape Town", parser)
+    for i in range(3):
+        result = parseGeneric(url, "City of Cape Town", parser)
+        if result != None: return result
+        else: print("Retrying")
+
+    return None
 
 def parseJhb():
     url = "https://www.citypower.co.za/customers/Pages/Load_Shedding_Downloads.aspx"
@@ -56,6 +65,7 @@ def parseJhb():
     options.add_argument('--headless')
 
     def parser(browser):
+        print("Processing JHB site")
         element1 = browser.find_element_by_id("MSOZoneCell_WebPartWPQ3")
         element2 = element1.find_element_by_class_name("ms-rtestate-field")
         text = element2.get_attribute('innerText')
@@ -70,6 +80,7 @@ def parsePta():
     url = "http://www.tshwane.gov.za/sites/Departments/Public-works-and-infrastructure/Pages/Load-Shedding.aspx"
     
     def parser(browser):
+        print("Processing PTA site")
         element = browser.find_element_by_id("status")
         text = element.get_attribute('innerHTML')
         match = re.search("Load\W+Shedding\W+Stage\W+(\d+)\W+is\W+in\W+progress", text, re.IGNORECASE)
