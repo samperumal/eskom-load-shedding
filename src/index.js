@@ -3,19 +3,9 @@ import App from './App';
 
 const moment = require("moment");
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-// internal icons
-import { faSyncAlt, faCalendarAlt, faArrowUp, faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
-library.add(faSyncAlt, faCalendarAlt, faArrowUp, faAngleLeft, faAngleRight);
-Vue.component('vue-fontawesome', FontAwesomeIcon);
-
-
 import Buefy from "buefy";
 Vue.use(Buefy, {
   defaultDateFormatter: (date) => moment(date).format("ddd, DD MMMM YYYY"),
-  defaultIconComponent: 'vue-fontawesome',
   defaultIconPack: 'fas',
 });
 Vue.config.productionTip = false;
