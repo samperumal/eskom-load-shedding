@@ -1,3 +1,11 @@
+$primary: #1899a6;
+$primary-invert: findColorInvert($primary);
+
+// Links
+$link: $primary;
+$link-invert: $primary-invert;
+$link-focus-border: $primary;
+
 $stage1: #fff7f3;
 $stage2: #fde0dd;
 $stage3: #fcc5c0;
@@ -12,7 +20,7 @@ $stage8: #7a0177;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e50;
+    color: $primary;
     padding-left: 1em;
     padding-right: 1em;
     margin-top: 20px;
@@ -80,7 +88,7 @@ div.stage8 {
     color: findColorInvert($stage8);
 }
 
-$daySummary: darkslategray;
+$daySummary: $primary;
 div.day-summary {
     background-color: $daySummary;
     color: findColorInvert($daySummary);
