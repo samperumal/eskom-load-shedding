@@ -314,29 +314,3 @@ export default Vue.extend({
 @import "~bulma";
 @import "~buefy/src/scss/buefy";
 </style>
-
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  padding-left: 1em;
-  padding-right: 1em;
-  margin-top: 20px;
-}
-
-div.acknowledgments {
-  margin-top: 1em;
-  color: darkgray;
-}
-
-div.acknowledgments-detail {
-  display: none;
-}
-
-div.acknowledgments:hover div.acknowledgments-detail {
-  display: block;
-}
-</style>
