@@ -6,31 +6,26 @@
         <div
           class="box is-size-5 has-text-weight-semibold"
         >{{ selectedCity }} Load Shedding Schedule</div>
-        <div
-          v-if="this.currentCityStage != null"
-          class="box"
-          :class="'stage' + this.currentCityStage.stage"
-        >
+        <div class="box" :class="selectedCityLiveStageData.cssclass">
           <div>
-            {{ currentCityStage.stage != null ? `Stage ${currentCityStage.stage}` : "Load shedding suspended"}}
+            {{ selectedCityLiveStageData.text}}
             <b-button
               class="button"
-              :class="'stage' + this.currentCityStage.stage"
-              size=""
-              style="margin-left: 0.5em; vertical-align:middle;"
+              :class="selectedCityLiveStageData.cssclass"
+              size="is-small"
+              style="margin-left: 1em; vertical-align:middle;"
               pack="fas"
               icon-left="sync-alt"
               :custom-class="this.loading ? 'spin' : ''"
-              @click="updateStage"
+              @click="updateLiveStageStatus"
             ></b-button>
           </div>
-          <div class="is-size-7" style="margin-top: 1em;">
+          <div v-if="selectedCityLiveStageData.known" class="is-size-7" style="margin-top: 1em;">
             (Source
-            <a :href="currentCityStage.url">{{ currentCityStage.site }}</a>
-            website at {{ currentCityStage.time }})
+            <a :href="selectedCityLiveStageData.url">{{ selectedCityLiveStageData.site }}</a>
+            website at {{ selectedCityLiveStageData.time }})
           </div>
         </div>
-        <div v-else class="box">Current stage is unknown</div>
         <section>
           <b-field label="City" label-position="on-border">
             <b-select placeholder="Select a zone" v-model="selectedCity" type="is-info" expanded>
@@ -115,7 +110,7 @@
 import Vue from "vue";
 import ZoneGrid from "./components/ZoneGrid";
 import axios from "axios";
-import { createMatrix, modBase1 } from "./js/eskom-data";
+import { createMatrix } from "./js/eskom-data";
 import jhbData from "./js/jhb.json";
 import dbnData from "./js/dbn.json";
 import ptaData from "./js/pta.json";
@@ -132,11 +127,13 @@ export default Vue.extend({
       selectedDate: new Date(),
       selectedZone: null,
       selectedStage: 1,
+      selectedCity: null,
+      
       possibleZones: [],
       matrixData: [],
-      selectedCity: null,
       cities: ["Cape Town", "Johannesburg", "Durban", "Tshwane (Pretoria)"],
-      currentStage: {
+      
+      liveStageStatus: {
         "Cape Town": null,
         Johannesburg: null,
         Durban: null,
@@ -169,15 +166,24 @@ export default Vue.extend({
       this.selectedZone = dataSource.zones[0];
       this.matrixData = dataSource.matrix;
 
-      if (val)
-        localStorage.setItem("selectedCity", val);
+      // Remember selected city changes
+      if (val) localStorage.setItem("selectedCity", val);
+
+      // Update selected stage when selected city changes
+    this.updateLiveStageForSelectedCity();
     },
+
     selectedZone: function(val) {
-      if (val)
-        localStorage.setItem("selectedZone", val);
+      // Remember selected zone changes
+      if (val) localStorage.setItem("selectedZone", val);
+    },
+
+    // Update selected stage when live stage status changes
+    liveStageStatus: function(val) {
+      this.updateLiveStageForSelectedCity();
     }
   },
-  mounted: function () {
+  mounted: function() {
     // Attempt to set selected city and zone from saved value in local storage
     const lsSelectedCity = localStorage.getItem("selectedCity");
     const lsSelectedZone = localStorage.getItem("selectedZone");
@@ -186,32 +192,50 @@ export default Vue.extend({
       this.$nextTick(() => {
         if (lsSelectedCity) this.selectedCity = lsSelectedCity;
         // Set zone on next tick to avoid default cascade behaviour of city change
-        if (lsSelectedZone) this.$nextTick(() => {
-          this.selectedZone = lsSelectedZone;
-        });
+        if (lsSelectedZone)
+          this.$nextTick(() => {
+            this.selectedZone = lsSelectedZone;
+          });
       });
     }
 
-    this.updateStage();
+    // Get live stage when app starts
+    this.updateLiveStageStatus();
   },
   methods: {
-    updateStage: function() {
+    // Get the latest live stages for supported cities from azure storage
+    updateLiveStageStatus: function() {
       if (!this.loading) {
         this.loading = true;
-        
+
         axios({
           method: "get",
           url: "https://cptloadshed.blob.core.windows.net/stage/current.json",
           headers: { "x-metaplex": "loadshed" }
-        })
-        .then(response => {
-          this.currentStage = response.data;
+        }).then(response => {
+          this.liveStageStatus = response.data;
           this.loading = false;
         });
+      }
+    },
+
+    // If the live stage status has data for the selected city, set 
+    // the selectedStage to the live stage value
+    updateLiveStageForSelectedCity: function() {
+      if (
+        this.liveStageStatus != null &&
+        this.liveStageStatus[this.selectedCity] != null && 
+        this.liveStageStatus[this.selectedCity].stage != null
+      ) {
+        const stageData = this.liveStageStatus[this.selectedCity];
+        this.selectedStage = stageData.stage * 1;
+      } else {
+        this.selectedStage = 0;
       }
     }
   },
   computed: {
+    // List of all possible load shedding stages
     possibleStages: function() {
       const stages = [];
       for (let i = 0; i <= 8; i++)
@@ -222,34 +246,43 @@ export default Vue.extend({
         });
       return stages;
     },
+
+    // Display attributes for the live status for the currently selected city
+    selectedCityLiveStageData: function() {
+      if (
+        this.liveStageStatus != null &&
+        this.liveStageStatus[this.selectedCity] != null
+      ) {
+        const stageData = this.liveStageStatus[this.selectedCity];
+        return {
+          known: true,
+          cssclass: `stage${stageData.stage}`,
+          text: stageData.stage != null ? `Stage ${stageData.stage}` : "Load shedding suspended",
+          url: stageData.url,
+          site: stageData.site,
+          time: stageData.time
+        };
+      } else {
+        return {
+          known: false,
+          cssclass: null,
+          text: "Current stage is unknown",
+          url: null,
+          site: null,
+          time: null
+        };
+      }
+    },
+    
+    // Format the start and end times for each block / row of data
     blockTitles: function() {
       return this.matrixData[0].blocks
         .reduce((acc, block) => [...acc, `${block.start} - ${block.end}`], [])
         .sort((a, b) => parseInt(a.slice(0, 2)) - parseInt(b.slice(0, 2)));
     },
-    currentCityStage: function() {
-      if (
-        this.currentStage != null &&
-        this.currentStage[this.selectedCity] != null
-      ) {
-        const stageData = this.currentStage[this.selectedCity];
-        this.selectedStage = stageData.stage * 1;
-        return stageData;
-      } else {
-        this.selectedStage = 0;
-        return null;
-      }
-    },
-    currentCityStageText: function() {
-      if (
-        this.currentStage != null &&
-        this.currentStage[this.selectedCity] != null &&
-        this.currentStage[this.selectedCity].stage != null
-      )
-        return this.currentStage[this.selectedCity];
-      //`The ${this.selectedCity} website reports that Stage ${this.currentStage[this.selectedCity]} load shedding is in effect`;
-      else return "Unknown";
-    },
+
+    // Return days and blocks for 7 days from the date selected in the calendar
+    // Defaults to a week from today
     selectedDaysData: function() {
       const localSelectedDate = this.selectedDate;
       const daysResult = [];
