@@ -29,7 +29,7 @@
         <section>
           <b-field label="City" label-position="on-border">
             <b-select placeholder="Select a zone" v-model="selectedCity" type="is-info" expanded>
-              <option v-for="option in this.cities" :value="option" :key="option">{{ option }}</option>
+              <option v-for="option in this.cityList" :value="option" :key="option">{{ option }}</option>
             </b-select>
           </b-field>
           <b-field label="Date" label-position="on-border">
@@ -43,7 +43,7 @@
             <b-field label="Zone" label-position="on-border" expanded>
               <b-select placeholder="Select a zone" v-model="selectedZone" type="is-info" expanded>
                 <option
-                  v-for="option in this.possibleZones"
+                  v-for="option in this.zoneList"
                   :value="option"
                   :key="option"
                 >Zone {{ option }}</option>
@@ -52,7 +52,7 @@
             <b-field label="Stage" label-position="on-border" expanded>
               <b-select v-model="selectedStage" type="is-info" expanded>
                 <option
-                  v-for="stage in possibleStages"
+                  v-for="stage in stageList"
                   :value="stage.value"
                   :key="stage.key"
                 >{{ stage.label }}</option>
@@ -124,28 +124,19 @@ const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 export default Vue.extend({
   data: function() {
     const data = {
+      selectedCity: null,
       selectedDate: new Date(),
       selectedZone: null,
-      selectedStage: 1,
-      selectedCity: null,
+      selectedStage: 0,
       
-      possibleZones: [],
-      matrixData: [],
-      cities: ["Cape Town", "Johannesburg", "Durban", "Tshwane (Pretoria)"],
-      
-      liveStageStatus: {
-        "Cape Town": null,
-        Johannesburg: null,
-        Durban: null,
-        "Tshwane (Pretoria)": null
-      },
+      cityList: ["Cape Town", "Johannesburg", "Durban", "Tshwane (Pretoria)"],
+      zoneList: [],
+
+      weeklyBlockTableData: [],      
+      liveStageStatus: {},
+
       loading: false
     };
-
-    data.selectedCity = "Cape Town";
-    data.possibleZones = cptData.zones;
-    data.selectedZone = cptData.zones[0];
-    data.matrixData = cptData.matrix;
 
     return data;
   },
@@ -162,9 +153,9 @@ export default Vue.extend({
       else if (val == "Tshwane (Pretoria)") dataSource = ptaData;
       else throw Exception();
 
-      this.possibleZones = dataSource.zones;
+      this.zoneList = dataSource.zones;
       this.selectedZone = dataSource.zones[0];
-      this.matrixData = dataSource.matrix;
+      this.weeklyBlockTableData = dataSource.matrix;
 
       // Remember selected city changes
       if (val) localStorage.setItem("selectedCity", val);
@@ -198,6 +189,8 @@ export default Vue.extend({
           });
       });
     }
+
+    this.$nextTick(() => this.selectedCity = this.cityList[0]);
 
     // Get live stage when app starts
     this.updateLiveStageStatus();
@@ -236,7 +229,7 @@ export default Vue.extend({
   },
   computed: {
     // List of all possible load shedding stages
-    possibleStages: function() {
+    stageList: function() {
       const stages = [];
       for (let i = 0; i <= 8; i++)
         stages.push({
@@ -276,7 +269,10 @@ export default Vue.extend({
     
     // Format the start and end times for each block / row of data
     blockTitles: function() {
-      return this.matrixData[0].blocks
+      if (this.weeklyBlockTableData == null || this.weeklyBlockTableData.length == 0)
+        return [];
+
+      return this.weeklyBlockTableData[0].blocks
         .reduce((acc, block) => [...acc, `${block.start} - ${block.end}`], [])
         .sort((a, b) => parseInt(a.slice(0, 2)) - parseInt(b.slice(0, 2)));
     },
@@ -286,6 +282,10 @@ export default Vue.extend({
     selectedDaysData: function() {
       const localSelectedDate = this.selectedDate;
       const daysResult = [];
+
+      if (this.weeklyBlockTableData == null || this.weeklyBlockTableData.length == 0)
+        return daysResult;
+
       for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
         const currentDay = moment(localSelectedDate).add(dayOffset, "days");
 
@@ -297,9 +297,9 @@ export default Vue.extend({
 
         let blocks;
         if (this.selectedCity == "Durban") {
-          blocks = this.matrixData[currentDay.day()].blocks;
+          blocks = this.weeklyBlockTableData[currentDay.day()].blocks;
         } else {
-          blocks = this.matrixData[currentDay.date() - 1].blocks;
+          blocks = this.weeklyBlockTableData[currentDay.date() - 1].blocks;
         }
 
         for (const block of blocks) {
