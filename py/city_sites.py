@@ -46,7 +46,7 @@ def parseCpt():
         print("Processing CPT site")
         element = browser.find_element_by_class_name("ExternalClass898DBDD1A6E04104B2A22756904464A5")
         text = element.get_attribute('innerText')
-        match = re.search("stage\W+(\d+)\W+active(\W+from\W+\d+:\d+\W+(\d+:\d+))?", text, re.IGNORECASE)
+        match = re.search(r"stage\W+(\d+)\W+active(\W+from\W+\d+:\d+\W+(\d+:\d+))?", text, re.IGNORECASE)
         
         if match != None: return (match.group(1), match.group(0))
         else: return (None, None)
@@ -69,7 +69,7 @@ def parseJhb():
         element1 = browser.find_element_by_id("MSOZoneCell_WebPartWPQ3")
         element2 = element1.find_element_by_class_name("ms-rtestate-field")
         text = element2.get_attribute('innerText')
-        match = re.search("stage\W+(\d+)\W+(in-progress|is\W+in\W+progress)", text, re.IGNORECASE)
+        match = re.search(r"stage\W+(\d+)\W+(in-progress|is\W+in\W+progress)", text, re.IGNORECASE)
         
         if match != None: return (match.group(1), match.group(0))
         else: return (None, None)
@@ -83,7 +83,7 @@ def parsePta():
         print("Processing PTA site")
         element = browser.find_element_by_id("status")
         text = element.get_attribute('innerHTML')
-        match = re.search("Load\W+Shedding\W+Stage\W+(\d+)\W+is\W+in\W+progress", text, re.IGNORECASE)
+        match = re.search(r"Load\W+Shedding\W+Stage\W+(\d+)\W+is\W+in\W+progress", text, re.IGNORECASE)
         
         if match != None: return (match.group(1), match.group(0))
         else: return (None, None)
