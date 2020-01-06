@@ -1,11 +1,17 @@
 $primary: #1899a6;
+$text-primary: $primary;
 $primary-invert: findColorInvert($primary);
+
+$colors: (
+    "primary": ($primary, $primary-invert),
+);
 
 // Links
 $link: $primary;
 $link-invert: $primary-invert;
 $link-focus-border: $primary;
 
+$stage0: $white;
 $stage1: #fff7f3;
 $stage2: #fde0dd;
 $stage3: #fcc5c0;
@@ -13,14 +19,16 @@ $stage4: #fa9fb5;
 $stage5: #f768a1;
 $stage6: #dd3497;
 $stage7: #ae017e;
-$stage8: #7a0177;
+$stage8: hsl(301, 98%, 24%);
+
+$bodyText: hsl(301, 0%, 66%);
 
 #app {
     font-family: "Avenir", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: $primary;
+    color: $bodyText;
     padding-left: 1em;
     padding-right: 1em;
     margin-top: 20px;
@@ -28,7 +36,7 @@ $stage8: #7a0177;
   
 div.acknowledgments {
     margin-top: 1em;
-    color: darkgray;
+    color: $bodyText;
 }
   
 div.acknowledgments-detail {
@@ -46,6 +54,11 @@ div.acknowledgments:hover div.acknowledgments-detail {
 .zone {
   text-align: center;
   font-weight: bold;
+}
+
+div.stage0 {
+    background-color: $stage0;
+    color: findColorInvert($stage0);
 }
 
 div.stage1 {

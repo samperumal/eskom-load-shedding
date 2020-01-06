@@ -324,7 +324,7 @@ export default Vue.extend({
             blockIndex: -1,
             blockLabel: `No load shedding`,
             stageLabel: "",
-            className: `stage-0`,
+            className: `stage0`,
             zone: this.selectedZone
           });
 
