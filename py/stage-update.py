@@ -2,7 +2,7 @@ import json
 import city_sites
 
 def writeBlob(key):
-    from azure.storage.blob import BlobServiceClient
+    from azure.storage.blob import BlobServiceClient, ContentSettings
 
     service = BlobServiceClient(account_url="https://cptloadshed.blob.core.windows.net/", credential=key)
 
@@ -20,6 +20,7 @@ def writeBlob(key):
 
     with open("current.json", "rb") as fin:
         blob.upload_blob(fin, overwrite = True)
+        blob.set_http_headers(ContentSettings(content_type = "application/json"))
 
     print("Successfully wrote blob")
 
