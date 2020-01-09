@@ -188,9 +188,10 @@ export default Vue.extend({
             this.selectedZone = lsSelectedZone;
           });
       });
+    } else {
+      this.$nextTick(() => this.selectedCity = this.cityList[0]);
     }
 
-    this.$nextTick(() => this.selectedCity = this.cityList[0]);
 
     // Get live stage when app starts
     this.updateLiveStageStatus();
