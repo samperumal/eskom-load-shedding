@@ -73,7 +73,7 @@ def parseJhb():
         element1 = browser.find_element_by_id("MSOZoneCell_WebPartWPQ3")
         element2 = element1.find_element_by_class_name("ms-rtestate-field")
         text = element2.get_attribute('innerText')
-        match = re.search(r"stage\W+(\d+)\W+(in-progress|is\W+in\W+progress|will\W+be\W+implemented)", text, re.IGNORECASE)
+        match = re.search(r"stage\W+(\d+)\W+-?\W*(in-?\W*progress|is\W+in\W+progress|will\W+be\W+implemented)", text, re.IGNORECASE)
         
         if match != None: return (match.group(1), match.group(0))
         else: return (None, None)
