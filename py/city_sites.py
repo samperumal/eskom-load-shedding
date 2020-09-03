@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 import pytz
 
 tz = pytz.timezone('Africa/Johannesburg')
-time_string = datetime.now(tz).strftime("%H:%M")
+time_string = datetime.now(tz).strftime("%H:%M, %d %b")
 
 def parseGeneric(url, site, parser):
     options = Options()

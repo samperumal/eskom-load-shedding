@@ -68,7 +68,7 @@
                 v-for="(block, bindex) in day.blocks"
                 :key="bindex"
                 :class="block.className"
-              >{{ block.blockLabel }}</div>
+              >{{ block.blockLabel }} <span style="margin-left: 1em">({{ block.stageLabel }})</span></div>
             </div>
           </div>
         </b-field>
@@ -119,8 +119,6 @@ var moment = require("moment");
 
 const cptData = createMatrix();
 
-const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
-
 export default Vue.extend({
   data: function() {
     const data = {
@@ -151,7 +149,7 @@ export default Vue.extend({
       else if (val == "Johannesburg") dataSource = jhbData;
       else if (val == "Durban") dataSource = dbnData;
       else if (val == "Tshwane (Pretoria)") dataSource = ptaData;
-      else throw Exception();
+      else throw Error();
 
       this.zoneList = dataSource.zones;
       this.selectedZone = dataSource.zones[0];
@@ -170,7 +168,7 @@ export default Vue.extend({
     },
 
     // Update selected stage when live stage status changes
-    liveStageStatus: function(val) {
+    liveStageStatus: function() {
       this.updateLiveStageForSelectedCity();
     }
   },
