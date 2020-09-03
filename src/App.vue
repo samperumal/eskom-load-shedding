@@ -23,7 +23,7 @@
           <div v-if="selectedCityLiveStageData.known" class="is-size-7" style="margin-top: 1em;">
             (Source
             <a :href="selectedCityLiveStageData.url">{{ selectedCityLiveStageData.site }}</a>
-            website at {{ selectedCityLiveStageData.time }})
+            at {{ selectedCityLiveStageData.time }})
           </div>
         </div>
         <section>
@@ -68,7 +68,7 @@
                 v-for="(block, bindex) in day.blocks"
                 :key="bindex"
                 :class="block.className"
-              >{{ block.blockLabel }} <span style="margin-left: 1em">({{ block.stageLabel }})</span></div>
+              >{{ block.blockLabel }} <span v-if="block.stageLabel != ''" style="margin-left: 1em">({{ block.stageLabel }})</span></div>
             </div>
           </div>
         </b-field>
