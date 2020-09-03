@@ -1,4 +1,4 @@
-$primary: #1899a6;
+$primary: #1f91d3;
 $text-primary: $primary;
 $primary-invert: findColorInvert($primary);
 
@@ -12,14 +12,14 @@ $link-invert: $primary-invert;
 $link-focus-border: $primary;
 
 $stage0: $white;
-$stage1: #fff7f3;
-$stage2: #fde0dd;
-$stage3: #fcc5c0;
-$stage4: #fa9fb5;
-$stage5: #f768a1;
-$stage6: #dd3497;
-$stage7: #ae017e;
-$stage8: hsl(301, 98%, 24%);
+$stage1: hsl(355, 78%, 94%);
+$stage2: hsl(355, 78%, 84%);
+$stage3: hsl(355, 78%, 74%);
+$stage4: hsl(355, 78%, 64%);
+$stage5: hsl(355, 78%, 54%);
+$stage6: hsl(355, 78%, 44%);
+$stage7: hsl(355, 78%, 34%);
+$stage8: hsl(355, 78%, 24%);
 
 $bodyText: hsl(301, 0%, 66%);
 
