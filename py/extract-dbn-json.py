@@ -26,11 +26,11 @@ zoneSet = set()
 block = 0
 stage = 1
 for line in lines:
-    parts = line.split()
+    parts = line.split('\t')
     block = parts[0]
     blockNumber = int(block[0:2]) // 2
-    day = int(parts[5])
-    stages = [[str(y) for y in x.replace("\"", "").split(',')][-1] for x in parts[1:5]]
+    day = int(parts[9])
+    stages = [[str(y) for y in x.replace("\"", "").split(',')][-1] for x in parts[1:9]]
     # print(blockNumber, block, stages, day)
     for stageNumber in range(8):
         if stageNumber  < len(stages):
