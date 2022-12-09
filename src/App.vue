@@ -207,7 +207,7 @@ export default Vue.extend({
         }).then(response => {
           this.liveStageStatus = response.data;
 
-          const now = new Date();              
+          const now = moment();              
               
           for (const city in this.liveStageStatus) {
             const stageData = this.liveStageStatus[city];
@@ -216,9 +216,9 @@ export default Vue.extend({
             if (Array.isArray(stageData.stages)) {
               for (const blockKey in stageData.stages) {
                 let block = stageData.stages[blockKey];
-                let start = new Date(block.start);
-                let end = new Date(block.end);
-                // console.log(now, start, end, start <= now, now <= end);
+                let start = moment(block.start);
+                let end = moment(block.end);
+                // console.log(now.format(), start.format(), end.format(), start <= now, now <= end);
                 if (start <= now && now <= end) {
                   this.liveStageStatus[city].stage = block.stage;
                   break;
@@ -308,8 +308,9 @@ export default Vue.extend({
         return daysResult;
 
       for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
-        const currentDay = moment(localSelectedDate).add(dayOffset, "days");
-
+        let currentDay = moment(localSelectedDate).add(dayOffset, "days");
+        currentDay.startOf("day");
+        
         const dayData = {
           dayIndex: dayOffset,
           label: currentDay.format("ddd Do MMM"),
@@ -329,10 +330,32 @@ export default Vue.extend({
               stageData.stage <= this.selectedStage &&
               stageData.zones.includes(this.selectedZone)
             ) {
+              let validated = true;
+
+              let blockTime = (currentDay.add(+block.start.substring(0, 2), "hours"));
+              console.log(blockTime.format());
+
+              const cityStageData = this.liveStageStatus[this.selectedCity];
+              if (cityStageData != null) {
+                if (Array.isArray(cityStageData.stages)) {
+                  validated = false;
+                  for (const blockKey in cityStageData.stages) {
+                    let block = cityStageData.stages[blockKey];
+                    let start = moment(block.start);
+                    let end = moment(block.end);
+                    // console.log(now.format(), start.format(), end.format(), start <= now, now <= end);
+                    if (start <= blockTime && blockTime <= end && stageData.stage <= block.stage) {
+                      validated = true;
+                      break;
+                    }
+                  }
+                }
+              }
+
               dayData.blocks.push({
                 blockIndex: block.block,
                 blockLabel: `${block.start} - ${block.end}`,
-                stageLabel: `Stage ${stageData.stage}`,
+                stageLabel: `Stage ${stageData.stage} - ${validated ? "Confirmed" : "Possible"}`,
                 className: `stage${stageData.stage}`,
                 zone: this.selectedZone
               });
