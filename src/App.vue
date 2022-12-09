@@ -206,6 +206,27 @@ export default Vue.extend({
           headers: { "x-metaplex": "loadshed" }
         }).then(response => {
           this.liveStageStatus = response.data;
+
+          const now = new Date();              
+              
+          for (const city in this.liveStageStatus) {
+            const stageData = this.liveStageStatus[city];
+            if (stageData == null) continue;
+
+            if (Array.isArray(stageData.stages)) {
+              for (const blockKey in stageData.stages) {
+                let block = stageData.stages[blockKey];
+                let start = new Date(block.start);
+                let end = new Date(block.end);
+                // console.log(now, start, end, start <= now, now <= end);
+                if (start <= now && now <= end) {
+                  this.liveStageStatus[city].stage = block.stage;
+                  break;
+                }
+              }
+            }
+          }
+
           this.loading = false;
         });
       }
@@ -246,6 +267,7 @@ export default Vue.extend({
         this.liveStageStatus[this.selectedCity] != null
       ) {
         const stageData = this.liveStageStatus[this.selectedCity];
+
         return {
           known: true,
           cssclass: `stage${stageData.stage}`,

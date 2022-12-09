@@ -1,5 +1,35 @@
 import json
 import city_sites
+import re
+from datetime import datetime as dt, timedelta
+from dateutil.parser import parse
+
+
+def get_cpt_input():
+  with open("cpt-input.txt", "r") as f:
+    return f.readlines()
+
+def parse_cpt_input(lines):
+  last_date = dt.utcnow().date()
+  stages = []
+  for line in lines:
+    stage_match = re.match(r'Stage (\d+): (\d+:\d+) - (\d+:\d+)', line)
+    date_match = re.match(r'([0-9]+) (\w+)', line)
+
+    if stage_match is not None:
+      start_time = dt.combine(last_date.date(), parse(stage_match[2]).time())
+      end_time = dt.combine(last_date.date(), parse(stage_match[3]).time())
+      if end_time < start_time:
+        end_time += timedelta(1)
+      stages.append({
+        "stage": int(stage_match[1]), 
+        "start": start_time.isoformat(), 
+        "end": end_time.isoformat()
+        })
+    elif date_match is not None:
+      last_date = parse(date_match[0])
+
+  return stages
 
 def writeBlob(key):
     from azure.storage.blob import BlobServiceClient, ContentSettings
@@ -9,10 +39,15 @@ def writeBlob(key):
     blob = service.get_blob_client("stage", "current.json")
 
     data = {
-        "Cape Town": city_sites.parseCpt(),
-        "Johannesburg": city_sites.parseJhb(),
+        "Cape Town": {
+          "stages": parse_cpt_input(get_cpt_input()), #city_sites.parseCpt(),
+          "url": "https://www.capetown.gov.za/Family%20and%20home/Residential-utility-services/Residential-electricity-services/Load-shedding-and-outages",
+          "site": "CoCT",
+          "time": dt.strftime(dt.now(), "%H:%M, %Y-%m-%d")
+        },
+        "Johannesburg": None, #city_sites.parseJhb(),
         "Durban": None,
-        "Tshwane (Pretoria)": city_sites.parsePta()
+        "Tshwane (Pretoria)": None, #city_sites.parsePta()
     }
 
     with open("current.json", "w") as fout:
