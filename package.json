@@ -20,10 +20,11 @@
     "@vue/component-compiler-utils": "^3.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.0.1",
-    "parcel-bundler": "^1.12.4",
-    "parcel-plugin-compress": "^1.1.0",
+    "node-gyp": "^9.3.0",
+    "parcel-bundler": "^1.12.5",
+    "parcel-plugin-compress": "^2.0.2",
     "sass": "^1.23.7",
-    "vue-template-compiler": "^2.6.10",
-    "vue-hot-reload-api": "^2.3.4"
+    "vue-hot-reload-api": "^2.3.4",
+    "vue-template-compiler": "^2.6.10"
   }
 }
