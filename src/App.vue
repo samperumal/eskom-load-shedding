@@ -221,6 +221,7 @@ export default Vue.extend({
                 // console.log(now.format(), start.format(), end.format(), start <= now, now <= end);
                 if (start <= now && now <= end) {
                   this.liveStageStatus[city].stage = block.stage;
+                  this.liveStageStatus[city].period = `${start.format("HH:mm")} - ${end.format("HH:mm")}`;
                   break;
                 }
               }
@@ -267,11 +268,12 @@ export default Vue.extend({
         this.liveStageStatus[this.selectedCity] != null
       ) {
         const stageData = this.liveStageStatus[this.selectedCity];
+        console.log(stageData.period);
 
         return {
           known: true,
           cssclass: `stage${stageData.stage}`,
-          text: stageData.stage != null ? `Stage ${stageData.stage}` : "Load shedding suspended",
+          text: stageData.stage != null ? `Stage ${stageData.stage} [${stageData.period}]` : "Load shedding suspended",
           url: stageData.url,
           site: stageData.site,
           time: stageData.time
