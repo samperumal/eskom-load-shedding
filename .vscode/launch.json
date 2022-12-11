@@ -5,7 +5,8 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "console": "internalConsole"
+            "console": "internalConsole",
+            "cwd": "${workspaceFolder}/py"
         }
     ]
 }
