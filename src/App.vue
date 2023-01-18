@@ -24,10 +24,30 @@ const zones = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 
 const stages = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
-const state = reactive({
+type Schedule = {
+  url: string,
+  site: string,
+  time: string,
+  stages: { stage: number, start: string, end: string }[]
+}
+
+type State = {
+  zone: number,
+  stage: number,
+  schedule: Schedule | null
+}
+
+type Block = {
+  stage: number,
+  desc: string,
+  period: string,
+  show: boolean
+}
+
+const state = reactive<State>({
   zone: 11,
-  stage: 6,
-  schedule: null as ({ url: string, site: string, time: string, stages: {stage: number, start: string, end: string}[]} | null)
+  stage: 0,
+  schedule: null
 })
 
 function loadSchedule() {
@@ -55,7 +75,7 @@ const days = computed<DateTime[]>(() => {
   return dates
 })
 
-const currentStage = computed<{show: Boolean, text: string}>(() => {
+const currentStage = computed<{ show: Boolean, text: string }>(() => {
   let ret = { show: false, text: "" }
   if (state.schedule != null && state.schedule.stages != null) {
     const now = DateTime.now()
@@ -72,8 +92,32 @@ const currentStage = computed<{show: Boolean, text: string}>(() => {
   return ret;
 })
 
-function slots(day: DateTime) {
-  return stageData[day.day - 1].map((dayArray: number[]) => dayArray.slice(0, state.stage))//.includes(state.zone))
+function mapBlock(value: number, index: number, day: number, state: State): Block {
+  let desc = "Possible"
+  const ret = {
+    stage: value,
+    desc: desc,
+    period: blocks[index],
+    show: value > 0 && value <= state.stage
+  }
+
+  if (state.schedule != null) {
+    const start = DateTime.now().startOf('day').plus({ hours: index * 2 })
+    const end = DateTime.now().startOf('day').plus({ hours: (index + 1) * 2 })
+  
+    for (const period of state.schedule.stages) {
+      const periodStart = DateTime.fromISO(period.start)
+      const periodEnd = DateTime.fromISO(period.end)
+      
+      if (0 < value && value <= period.stage && periodStart < end && periodEnd >= start) {
+        ret.desc = "Confirmed"
+        ret.show = true
+      }
+      
+    }
+  }
+
+  return ret
 }
 
 const dayData = computed(() => {
@@ -85,7 +129,7 @@ const dayData = computed(() => {
       weekday: 'short'
     }),
     date: d,
-    slots: stageData[state.zone][d.day - 1]
+    slots: stageData[state.zone][d.day - 1].map((v, i) => mapBlock(v, i, d.day, state))
   }))
 })
 </script>
@@ -113,7 +157,7 @@ const dayData = computed(() => {
       <div>{{ day.disp }}</div>
       <div v-if="day.slots != null && day.slots.length == 0">No load shedding</div>
       <div v-for="(slot, index) in day.slots">
-        <div v-if="slot > 0 && slot <= state.stage">{{ blocks[index] }} [Stage {{ slot }}]</div>
+        <div v-if="slot.show">{{ slot.period }} [Stage {{ slot.stage }} - {{ slot.desc }}]</div>
       </div>
     </div>
   </main>
