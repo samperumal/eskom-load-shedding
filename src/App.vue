@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive } from 'vue';
+import { computed, onMounted, reactive, watch } from 'vue';
 import stageDataJson from './cpt-zone-day-block.json'
 import { DateTime } from 'luxon';
 
@@ -50,6 +50,11 @@ const state = reactive<State>({
   schedule: null
 })
 
+watch(
+  () => state.zone,
+  (zone) => localStorage.setItem("selectedZone", zone.toString())
+)
+
 type DisplaySchedule = { active: Boolean, text: string, date: string }
 
 function loadSchedule() {
@@ -67,6 +72,10 @@ function loadSchedule() {
 }
 
 onMounted(() => {
+  const prevZone = localStorage.getItem("selectedZone")
+  if (prevZone != null && (+prevZone >= 1) && (+prevZone <= 16))
+    state.zone = +prevZone
+
   loadSchedule()
 })
 
