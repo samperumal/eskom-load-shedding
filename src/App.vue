@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue';
+import { computed, onMounted, reactive } from 'vue';
 import stageDataJson from './cpt-zone-day-block.json'
 import { DateTime } from 'luxon';
 
@@ -20,9 +20,32 @@ const blocks = [
   "22:00 - 00:00",
 ]
 
+const zones = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+
+const stages = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+
 const state = reactive({
   zone: 11,
-  stage: 6
+  stage: 6,
+  schedule: null as ({ url: string, site: string, time: string, stages: {stage: number, start: string, end: string}[]} | null)
+})
+
+function loadSchedule() {
+  fetch("https://cptloadshed.blob.core.windows.net/stage/current.json", {
+    headers: { "x-metaplex": "loadshed" }
+  })
+    .then(resp => {
+      if (resp.status == 200) {
+        resp.json()
+          .then(data => state.schedule = data["Cape Town"])
+          .catch(error => state.schedule = null)
+      }
+    })
+    .catch(error => state.schedule = null)
+}
+
+onMounted(() => {
+  loadSchedule()
 })
 
 const days = computed<DateTime[]>(() => {
@@ -32,8 +55,25 @@ const days = computed<DateTime[]>(() => {
   return dates
 })
 
+const currentStage = computed<{show: Boolean, text: string}>(() => {
+  let ret = { show: false, text: "" }
+  if (state.schedule != null && state.schedule.stages != null) {
+    const now = DateTime.now()
+    for (const stage of state.schedule.stages) {
+      const start = DateTime.fromISO(stage.start)
+      const end = DateTime.fromISO(stage.end)
+      if (start <= now && now <= end) {
+        ret.show = true
+        ret.text = `Stage ${stage.stage} from ${start.toLocaleString(DateTime.TIME_24_SIMPLE)} until ${end.toLocaleString(DateTime.TIME_24_SIMPLE)}`
+      }
+    }
+  }
+
+  return ret;
+})
+
 function slots(day: DateTime) {
-  return stageData[day.day-1].map((dayArray : number[]) => dayArray.slice(0, state.stage))//.includes(state.zone))
+  return stageData[day.day - 1].map((dayArray: number[]) => dayArray.slice(0, state.stage))//.includes(state.zone))
 }
 
 const dayData = computed(() => {
@@ -44,21 +84,34 @@ const dayData = computed(() => {
       day: 'numeric',
       weekday: 'short'
     }),
-    date: d, 
+    date: d,
     slots: stageData[state.zone][d.day - 1]
   }))
 })
 </script>
 
 <template>
-  <header>
-    <div>Zone: {{ state.zone }}</div>
-    <div>Stage: {{ state.stage }}</div>
+  <header style="display: flex; flex-direction: column; place-content: center;">
+    <div>Zone:
+      <select v-model="state.zone">
+        <option v-for="zone in zones" :value="zone">{{ zone }}</option>
+      </select>
+    </div>
+    <div>Stage:
+      <select v-model="state.stage">
+        <option v-for="stage in stages" :value="stage">{{ stage }}</option>
+      </select>
+    </div>
+    <div v-if="state.schedule != null">
+      <div>Updated at {{ state.schedule.time }} from <a :href="state.schedule.url">{{ state.schedule.site }}</a></div>
+      <div>{{ currentStage.text }}</div>
+    </div>
   </header>
 
   <main>
     <div v-for="day in dayData">
       <div>{{ day.disp }}</div>
+      <div v-if="day.slots != null && day.slots.length == 0">No load shedding</div>
       <div v-for="(slot, index) in day.slots">
         <div v-if="slot > 0 && slot <= state.stage">{{ blocks[index] }} [Stage {{ slot }}]</div>
       </div>
