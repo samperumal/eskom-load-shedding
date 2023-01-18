@@ -1,395 +1,249 @@
+<script setup lang="ts">
+import { computed, onMounted, reactive, watch } from 'vue';
+import stageDataJson from './cpt-zone-day-block.json'
+import { DateTime } from 'luxon';
+
+const stageData = reactive(stageDataJson as number[][][])
+
+const blocks = [
+  "00:00 - 02:00",
+  "02:00 - 04:00",
+  "04:00 - 06:00",
+  "06:00 - 08:00",
+  "08:00 - 10:00",
+  "10:00 - 12:00",
+  "12:00 - 14:00",
+  "14:00 - 16:00",
+  "16:00 - 18:00",
+  "18:00 - 20:00",
+  "20:00 - 22:00",
+  "22:00 - 00:00",
+]
+
+const zones = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+
+const stages = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+
+type Schedule = {
+  url: string,
+  site: string,
+  time: string,
+  stages: { stage: number, start: string, end: string }[]
+}
+
+type State = {
+  zone: number,
+  stage: number,
+  schedule: Schedule | null
+}
+
+type Block = {
+  stage: number,
+  desc: string,
+  period: string,
+  show: boolean
+}
+
+const state = reactive<State>({
+  zone: 11,
+  stage: 0,
+  schedule: null
+})
+
+watch(
+  () => state.zone,
+  (zone) => localStorage.setItem("selectedZone", zone.toString())
+)
+
+type DisplaySchedule = { active: Boolean, text: string, date: string }
+
+function loadSchedule() {
+  fetch("https://cptloadshed.blob.core.windows.net/stage/current.json", {
+    headers: { "x-metaplex": "loadshed" }
+  })
+    .then(resp => {
+      if (resp.status == 200) {
+        resp.json()
+          .then(data => state.schedule = data["Cape Town"])
+          .catch(error => state.schedule = null)
+      }
+    })
+    .catch(error => state.schedule = null)
+}
+
+onMounted(() => {
+  const prevZone = localStorage.getItem("selectedZone")
+  if (prevZone != null && (+prevZone >= 1) && (+prevZone <= 16))
+    state.zone = +prevZone
+
+  loadSchedule()
+})
+
+const days = computed<DateTime[]>(() => {
+  const offsets = [0, 1, 2, 3, 4, 10]
+  const dates = offsets.map(ofst => DateTime.now().plus({ days: ofst }))
+
+  return dates
+})
+
+const latestSchedule = computed<Map<string, DisplaySchedule[]>>(() => {
+  let ret = { show: false, text: "" }
+  let schedDict = new Map<string, DisplaySchedule[]>()
+
+  if (state.schedule != null && state.schedule.stages != null) {
+    const now = DateTime.now()
+
+    let schedule = state.schedule.stages.map(stage => {
+      const start = DateTime.fromISO(stage.start)
+      const end = DateTime.fromISO(stage.end)
+
+      return {
+        text: `Stage ${stage.stage} from ${start.toLocaleString(DateTime.TIME_24_SIMPLE)} until ${end.toLocaleString(DateTime.TIME_24_SIMPLE)}`,
+        date: start.setLocale('en-ZA').toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY),
+        end: end,
+        active: (start <= now && now <= end)
+      }
+    })
+      .filter(sched => sched.end > DateTime.now())
+
+
+    for (const sched of schedule) {
+      if (!schedDict.has(sched.date))
+        schedDict.set(sched.date, []);
+
+      (schedDict.get(sched.date) ?? []).push(sched)
+    }
+  }
+
+  return schedDict;
+})
+
+function mapBlock(value: number, index: number, day: number, state: State): Block {
+  let desc = ""
+  const ret = {
+    stage: value,
+    desc: desc,
+    period: blocks[index],
+    show: value > 0 && value <= state.stage
+  }
+
+  const today = DateTime.now().day
+
+  if (state.schedule != null) {
+    const start = DateTime.now().startOf('day').plus({ hours: index * 2, days: day - today })
+    const end = DateTime.now().startOf('day').plus({ hours: (index + 1) * 2, days: day - today })
+
+    for (const period of state.schedule.stages) {
+      const periodStart = DateTime.fromISO(period.start)
+      const periodEnd = DateTime.fromISO(period.end)
+
+      if (0 < value && value <= period.stage && periodStart < end && periodEnd >= start) {
+        ret.desc = " - Confirmed"
+        ret.show = true
+      }
+
+    }
+  }
+
+  return ret
+}
+
+const dayData = computed(() => {
+  return days.value.map(d => ({
+    disp: d.setLocale('en-ZA').toLocaleString({
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      weekday: 'short'
+    }),
+    date: d,
+    slots: stageData[state.zone][d.day - 1]
+      .map((v, i) => mapBlock(v, i, d.day, state))
+      .filter(b => b.show)
+  }))
+})
+</script>
+
 <template>
-  <div id="app">
-    <!-- <img width="25%" src="./assets/logo.png" /> -->
-    <div class="columns">
-      <div class="column is-full-mobile is-one-third-tablet is-one-quarter-desktop">
-        <div
-          class="box is-size-5 has-text-weight-semibold"
-        >{{ selectedCity }} Load Shedding Schedule</div>
-        <div class="box" :class="selectedCityLiveStageData.cssclass">
-          <div>
-            {{ selectedCityLiveStageData.text}}
-            <b-button
-              class="button"
-              :class="selectedCityLiveStageData.cssclass"
-              size="is-small"
-              style="margin-left: 1em; vertical-align:middle;"
-              pack="fas"
-              icon-left="sync-alt"
-              :custom-class="this.loading ? 'spin' : ''"
-              @click="updateLiveStageStatus"
-            ></b-button>
-          </div>
-          <div v-if="selectedCityLiveStageData.known" class="is-size-7" style="margin-top: 1em;">
-            (Source
-            <a :href="selectedCityLiveStageData.url">{{ selectedCityLiveStageData.site }}</a>
-            at {{ selectedCityLiveStageData.time }})
-          </div>
-        </div>
-        <section>
-          <b-field label="City" label-position="on-border">
-            <b-select placeholder="Select a zone" v-model="selectedCity" type="is-info" expanded>
-              <option v-for="option in this.cityList" :value="option" :key="option">{{ option }}</option>
-            </b-select>
-          </b-field>
-          <b-field label="Date" label-position="on-border">
-            <b-datepicker
-              placeholder="Click to select..."
-              icon="calendar-alt"
-              v-model="selectedDate"
-            ></b-datepicker>
-          </b-field>
-          <b-field grouped>
-            <b-field label="Zone" label-position="on-border" expanded>
-              <b-select placeholder="Select a zone" v-model="selectedZone" type="is-info" expanded>
-                <option
-                  v-for="option in this.zoneList"
-                  :value="option"
-                  :key="option"
-                >Zone {{ option }}</option>
-              </b-select>
-            </b-field>
-            <b-field label="Stage" label-position="on-border" expanded>
-              <b-select v-model="selectedStage" type="is-info" expanded>
-                <option
-                  v-for="stage in stageList"
-                  :value="stage.value"
-                  :key="stage.key"
-                >{{ stage.label }}</option>
-              </b-select>
-            </b-field>
-          </b-field>
-        </section>
-        <b-field label="Summary">
-          <div class="block">
-            <div v-for="(day, dindex) in selectedDaysData" :key="dindex" class="block">
-              <div class="day-summary">{{ day.label }}</div>
-              <div
-                v-for="(block, bindex) in day.blocks"
-                :key="bindex"
-                :class="block.className"
-              >{{ block.blockLabel }} <span v-if="block.stageLabel != ''" style="margin-left: 1em">({{ block.stageLabel }})</span></div>
-            </div>
-          </div>
-        </b-field>
-      </div>
-      <div class="column is-hidden-mobile">
-        <ZoneGrid
-          :selectedDaysData="selectedDaysData"
-          :selectedDate="selectedDate"
-          :selectedZone="selectedZone"
-          :selectedStage="selectedStage"
-          :blockTitles="blockTitles"
-        ></ZoneGrid>
+  <h3>Cape Town Loadshedding</h3>
+  <header>
+    <div>Zone:
+      <select v-model="state.zone">
+        <option v-for="zone in zones" :value="zone">{{ zone }}</option>
+      </select>
+    </div>
+    <div>Stage:
+      <select v-model="state.stage">
+        <option v-for="stage in stages" :value="stage">{{ stage }}</option>
+      </select>
+    </div>
+  </header>
+
+  <main>
+    <div v-for="day in dayData" class="day">
+      <div class="date">{{ day.disp }}</div>
+      <div v-if="day.slots != null && day.slots.length == 0" class="no-shed">No load shedding</div>
+      <div v-for="(slot, index) in day.slots">
+        <div v-if="slot.show">{{ slot.period }} [Stage {{ slot.stage }}{{ slot.desc }}]</div>
       </div>
     </div>
-    <section class="footer">
+  </main>
+
+  <footer>
+
+    <div v-if="state.schedule != null">
+      <div style="margin-bottom: 0.5rem;"><a :href="state.schedule.url">{{ state.schedule.site }}</a> schedule updated
+        at {{ state.schedule.time }}</div>
+      <div v-for="schedPair in latestSchedule" class="sched-day">
+        <div>{{ schedPair[0] }}</div>
+        <div v-for="sched in schedPair[1]">{{ sched.text }}</div>
+      </div>
+    </div>
+
+    <div class="developer">
       <div>Developed by Sameshan Perumal</div>
       <div>
         <a href="https://datacartographer.com">https://datacartographer.com</a>
       </div>
-      <div class="acknowledgments is-size-6">
-        <div>Acknowledgments</div>
-        <div class="acknowledgments-detail">
-          <div>
-            Developed with
-            <a href="https://vuejs.org/">Vue</a>,
-            <a href="https://bulma.io/">Bulma</a> and
-            <a href="https://buefy.org/">Buefy</a>, hosted by
-            <a href="https://www.netlify.com
-">Netlify</a>
-          </div>
-          <div>Tshwane (Pretoria) data provided by Kobus Viljoen</div>
-        </div>
-      </div>
-    </section>
-  </div>
+    </div>
+  </footer>
 </template>
 
-<script>
-import Vue from "vue";
-import ZoneGrid from "./components/ZoneGrid";
-import axios from "axios";
-import { createMatrix } from "./js/eskom-data";
-import jhbData from "./js/jhb.json";
-import dbnData from "./js/dbn.json";
-import ptaData from "./js/pta.json";
+<style scoped>
+header {
+  line-height: 1.5;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+}
 
-var moment = require("moment");
+.day {
+  margin: 1rem 0;
+}
 
-const cptData = createMatrix();
+.day .date {
+  text-align: center;
+  border-bottom: 1px solid gray;
+}
 
-export default Vue.extend({
-  data: function() {
-    const data = {
-      selectedCity: null,
-      selectedDate: new Date(),
-      selectedZone: null,
-      selectedStage: 0,
-      
-      cityList: ["Cape Town", "Johannesburg", "Durban", "Tshwane (Pretoria)"],
-      zoneList: [],
+.day .no-shed {
+  text-align: center;
+}
 
-      weeklyBlockTableData: [],      
-      liveStageStatus: {},
+footer {
+  border-top: 1px solid gray;
+  margin-top: 2rem;
+  text-align: center;
+}
 
-      loading: false
-    };
+.sched-day {
+  margin-bottom: 1rem;
+}
 
-    return data;
-  },
-  components: {
-    ZoneGrid
-  },
-  props: {},
-  watch: {
-    selectedCity: function(val) {
-      let dataSource = null;
-      if (val == "Cape Town") dataSource = cptData;
-      else if (val == "Johannesburg") dataSource = jhbData;
-      else if (val == "Durban") dataSource = dbnData;
-      else if (val == "Tshwane (Pretoria)") dataSource = ptaData;
-      else throw Error();
-
-      this.zoneList = dataSource.zones;
-      this.selectedZone = dataSource.zones[0];
-      this.weeklyBlockTableData = dataSource.matrix;
-
-      // Remember selected city changes
-      if (val) localStorage.setItem("selectedCity", val);
-
-      // Update selected stage when selected city changes
-    this.updateLiveStageForSelectedCity();
-    },
-
-    selectedZone: function(val) {
-      // Remember selected zone changes
-      if (val) localStorage.setItem("selectedZone", val);
-    },
-
-    // Update selected stage when live stage status changes
-    liveStageStatus: function() {
-      this.updateLiveStageForSelectedCity();
-    }
-  },
-  mounted: function() {
-    // Attempt to set selected city and zone from saved value in local storage
-    const lsSelectedCity = localStorage.getItem("selectedCity");
-    const lsSelectedZone = localStorage.getItem("selectedZone");
-    if (lsSelectedCity || lsSelectedZone) {
-      // Update selected city on next tick to avoid conflicts with initial values
-      this.$nextTick(() => {
-        if (lsSelectedCity) this.selectedCity = lsSelectedCity;
-        // Set zone on next tick to avoid default cascade behaviour of city change
-        if (lsSelectedZone)
-          this.$nextTick(() => {
-            this.selectedZone = lsSelectedZone;
-          });
-      });
-    } else {
-      this.$nextTick(() => this.selectedCity = this.cityList[0]);
-    }
-
-
-    // Get live stage when app starts
-    this.updateLiveStageStatus();
-  },
-  methods: {
-    // Get the latest live stages for supported cities from azure storage
-    updateLiveStageStatus: function() {
-      if (!this.loading) {
-        this.loading = true;
-
-        axios({
-          method: "get",
-          url: "https://cptloadshed.blob.core.windows.net/stage/current.json",
-          headers: { "x-metaplex": "loadshed" }
-        }).then(response => {
-          this.liveStageStatus = response.data;
-
-          const now = moment();              
-              
-          for (const city in this.liveStageStatus) {
-            const stageData = this.liveStageStatus[city];
-            if (stageData == null) continue;
-
-            if (Array.isArray(stageData.stages)) {
-              for (const blockKey in stageData.stages) {
-                let block = stageData.stages[blockKey];
-                let start = moment(block.start);
-                let end = moment(block.end);
-                // console.log(now.format(), start.format(), end.format(), start <= now, now <= end);
-                if (start <= now && now <= end) {
-                  this.liveStageStatus[city].stage = block.stage;
-                  this.liveStageStatus[city].period = `${start.format("HH:mm")} - ${end.format("HH:mm")}`;
-                  break;
-                }
-              }
-            }
-          }
-
-          this.loading = false;
-        });
-      }
-    },
-
-    // If the live stage status has data for the selected city, set 
-    // the selectedStage to the live stage value
-    updateLiveStageForSelectedCity: function() {
-      if (
-        this.liveStageStatus != null &&
-        this.liveStageStatus[this.selectedCity] != null && 
-        this.liveStageStatus[this.selectedCity].stage != null
-      ) {
-        const stageData = this.liveStageStatus[this.selectedCity];
-        this.selectedStage = stageData.stage * 1;
-      } else {
-        this.selectedStage = 0;
-      }
-    }
-  },
-  computed: {
-    // List of all possible load shedding stages
-    stageList: function() {
-      const stages = [];
-      for (let i = 0; i <= 8; i++)
-        stages.push({
-          key: `stage${i}`,
-          label: i == 0 ? "None" : `Stage ${i}`,
-          value: i
-        });
-      return stages;
-    },
-
-    // Display attributes for the live status for the currently selected city
-    selectedCityLiveStageData: function() {
-      if (
-        this.liveStageStatus != null &&
-        this.liveStageStatus[this.selectedCity] != null
-      ) {
-        const stageData = this.liveStageStatus[this.selectedCity];
-        console.log(stageData.period);
-
-        return {
-          known: true,
-          cssclass: `stage${stageData.stage}`,
-          text: stageData.stage != null ? `Stage ${stageData.stage} [${stageData.period}]` : "Load shedding suspended",
-          url: stageData.url,
-          site: stageData.site,
-          time: stageData.time
-        };
-      } else {
-        return {
-          known: false,
-          cssclass: null,
-          text: "Current stage is unknown",
-          url: null,
-          site: null,
-          time: null
-        };
-      }
-    },
-    
-    // Format the start and end times for each block / row of data
-    blockTitles: function() {
-      if (this.weeklyBlockTableData == null || this.weeklyBlockTableData.length == 0)
-        return [];
-
-      return this.weeklyBlockTableData[0].blocks
-        .reduce((acc, block) => [...acc, `${block.start} - ${block.end}`], [])
-        .sort((a, b) => parseInt(a.slice(0, 2)) - parseInt(b.slice(0, 2)));
-    },
-
-    // Return days and blocks for 7 days from the date selected in the calendar
-    // Defaults to a week from today
-    selectedDaysData: function() {
-      const localSelectedDate = this.selectedDate;
-      const daysResult = [];
-
-      if (this.weeklyBlockTableData == null || this.weeklyBlockTableData.length == 0)
-        return daysResult;
-
-      for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
-        let currentDay = moment(localSelectedDate).add(dayOffset, "days");
-        currentDay.startOf("day");
-        
-        const dayData = {
-          dayIndex: dayOffset,
-          label: currentDay.format("ddd Do MMM"),
-          blocks: []
-        };
-
-        let blocks;
-        if (this.selectedCity == "Durban") {
-          blocks = this.weeklyBlockTableData[currentDay.day()].blocks;
-        } else {
-          blocks = this.weeklyBlockTableData[currentDay.date() - 1].blocks;
-        }
-
-        for (const block of blocks) {
-          for (const stageData of block.stages) {
-            if (
-              stageData.stage <= this.selectedStage &&
-              stageData.zones.includes(this.selectedZone)
-            ) {
-              let validated = true;
-
-              let blockTime = (currentDay.add(+block.start.substring(0, 2), "hours"));
-              console.log(blockTime.format());
-
-              const cityStageData = this.liveStageStatus[this.selectedCity];
-              if (cityStageData != null) {
-                if (Array.isArray(cityStageData.stages)) {
-                  validated = false;
-                  for (const blockKey in cityStageData.stages) {
-                    let block = cityStageData.stages[blockKey];
-                    let start = moment(block.start);
-                    let end = moment(block.end);
-                    // console.log(now.format(), start.format(), end.format(), start <= now, now <= end);
-                    if (start <= blockTime && blockTime <= end && stageData.stage <= block.stage) {
-                      validated = true;
-                      break;
-                    }
-                  }
-                }
-              }
-
-              dayData.blocks.push({
-                blockIndex: block.block,
-                blockLabel: `${block.start} - ${block.end}`,
-                stageLabel: `Stage ${stageData.stage} - ${validated ? "Confirmed" : "Possible"}`,
-                className: `stage${stageData.stage}`,
-                zone: this.selectedZone
-              });
-            }
-          }
-        }
-
-        if (dayData.blocks.length == 0)
-          dayData.blocks.push({
-            blockIndex: -1,
-            blockLabel: `No load shedding`,
-            stageLabel: "",
-            className: `stage0`,
-            zone: this.selectedZone
-          });
-
-        daysResult.push(dayData);
-      }
-
-      return daysResult;
-    }
-  }
-});
-</script>
-
-<style lang="scss">
-// Import Bulma's core
-@import "~bulma/sass/utilities/_all";
-
-@import "./styles/styles.scss";
-
-// Import Bulma and Buefy styles
-@import "~bulma";
-@import "~buefy/src/scss/buefy";
+.developer {
+  border-top: 1px solid gray;
+  margin-top: 2rem;
+}
 </style>

@@ -1,5 +1,5 @@
 import json
-import city_sites
+# import city_sites
 import re
 from datetime import datetime as dt, timedelta
 from dateutil.parser import parse
