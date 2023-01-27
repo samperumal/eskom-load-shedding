@@ -165,41 +165,45 @@ const dayData = computed(() => {
 </script>
 
 <template>
-  <h3>Cape Town Loadshedding</h3>
   <header>
-    <div>Zone:
-      <select v-model="state.zone">
-        <option v-for="zone in zones" :value="zone">{{ zone }}</option>
-      </select>
-    </div>
-    <div>Stage:
-      <select v-model="state.stage">
-        <option v-for="stage in stages" :value="stage">{{ stage }}</option>
-      </select>
-    </div>
+    <h3>Cape Town Loadshedding</h3>
   </header>
 
   <main>
-    <div v-for="day in dayData" class="day">
-      <div class="date">{{ day.disp }}</div>
-      <div v-if="day.slots != null && day.slots.length == 0" class="no-shed">No load shedding</div>
-      <div v-for="(slot, index) in day.slots">
-        <div v-if="slot.show">{{ slot.period }} [Stage {{ slot.stage }}{{ slot.desc }}]</div>
+    <div>
+      <div class="input">
+        <div>Zone:
+          <select v-model="state.zone">
+            <option v-for="zone in zones" :value="zone">{{ zone }}</option>
+          </select>
+        </div>
+        <div>Stage:
+          <select v-model="state.stage">
+            <option v-for="stage in stages" :value="stage">{{ stage }}</option>
+          </select>
+        </div>
+      </div>
+      <div v-for="day in dayData" class="day">
+        <div class="date">{{ day.disp }}</div>
+        <div v-if="day.slots != null && day.slots.length == 0" class="no-shed">No load shedding</div>
+        <div v-for="(slot, index) in day.slots">
+          <div v-if="slot.show">{{ slot.period }} [Stage {{ slot.stage }}{{ slot.desc }}]</div>
+        </div>
+      </div>
+    </div>
+    <div class="schedule">
+      <div v-if="state.schedule != null">
+        <div style="margin-bottom: 0.5rem;"><a :href="state.schedule.url">{{ state.schedule.site }}</a> schedule updated
+          at {{ state.schedule.time }}</div>
+        <div v-for="schedPair in latestSchedule" class="sched-day">
+          <div>{{ schedPair[0] }}</div>
+          <div v-for="sched in schedPair[1]">{{ sched.text }}</div>
+        </div>
       </div>
     </div>
   </main>
 
   <footer>
-
-    <div v-if="state.schedule != null">
-      <div style="margin-bottom: 0.5rem;"><a :href="state.schedule.url">{{ state.schedule.site }}</a> schedule updated
-        at {{ state.schedule.time }}</div>
-      <div v-for="schedPair in latestSchedule" class="sched-day">
-        <div>{{ schedPair[0] }}</div>
-        <div v-for="sched in schedPair[1]">{{ sched.text }}</div>
-      </div>
-    </div>
-
     <div class="developer">
       <div>Developed by Sameshan Perumal</div>
       <div>
@@ -212,11 +216,6 @@ const dayData = computed(() => {
 <style scoped>
 header {
   line-height: 1.5;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 1rem;
 }
 
 .day {
@@ -233,8 +232,6 @@ header {
 }
 
 footer {
-  border-top: 1px solid gray;
-  margin-top: 2rem;
   text-align: center;
 }
 
@@ -243,6 +240,25 @@ footer {
 }
 
 .developer {
+  border-top: 1px solid gray;
+  margin-top: 2rem;
+}
+
+
+
+main>div {
+  text-align: center;
+}
+
+main .input {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+main .schedule {
   border-top: 1px solid gray;
   margin-top: 2rem;
 }

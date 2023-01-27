@@ -31,7 +31,15 @@ a,
     place-items: center;
   }
 
-  #app {
-    
+  header {
+    margin-bottom: 2rem;
+  }
+
+  main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    justify-content: center;
+    align-items: center;
   }
 }
