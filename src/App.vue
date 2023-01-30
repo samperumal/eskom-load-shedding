@@ -127,11 +127,18 @@ function mapBlock(value: number, index: number, day: number, state: State): Bloc
     show: value > 0 && value <= state.stage
   }
 
-  const today = DateTime.now().day
+  let today = DateTime.now()
+  let daysToAdd = 0
+
+  while (today.day != day) {
+    daysToAdd += 1
+    today = today.plus({ days: 1 })
+  }
+  // if (daysToAdd < 0)
 
   if (state.schedule != null) {
-    const start = DateTime.now().startOf('day').plus({ hours: index * 2, days: day - today })
-    const end = DateTime.now().startOf('day').plus({ hours: (index + 1) * 2, days: day - today })
+    const start = DateTime.now().startOf('day').plus({ hours: index * 2, days: daysToAdd })
+    const end = start.plus({ hours: 2 })
 
     for (const period of state.schedule.stages) {
       const periodStart = DateTime.fromISO(period.start)
